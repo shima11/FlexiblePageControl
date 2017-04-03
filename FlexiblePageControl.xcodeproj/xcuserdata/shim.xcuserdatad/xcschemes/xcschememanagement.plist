@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Demo.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>FlexiblePageControl.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -13,6 +18,11 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>D4DC6C3A1E92B8FD0022F452</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D4DC6C491E92B9300022F452</key>
 		<dict>
 			<key>primary</key>
 			<true/>
