@@ -12,6 +12,8 @@
 		D4DC6C4F1E92B9310022F452 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DC6C4E1E92B9310022F452 /* ViewController.swift */; };
 		D4DC6C541E92B9310022F452 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4DC6C531E92B9310022F452 /* Assets.xcassets */; };
 		D4DC6C571E92B9310022F452 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4DC6C551E92B9310022F452 /* LaunchScreen.storyboard */; };
+		D4DC6C6C1E92C7190022F452 /* FlexiblePageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DC6C6B1E92C7190022F452 /* FlexiblePageControl.swift */; };
+		D4DC6C6D1E92C73B0022F452 /* FlexiblePageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DC6C6B1E92C7190022F452 /* FlexiblePageControl.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,7 @@
 		D4DC6C531E92B9310022F452 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D4DC6C561E92B9310022F452 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D4DC6C581E92B9310022F452 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D4DC6C6B1E92C7190022F452 /* FlexiblePageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlexiblePageControl.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				D4DC6C3E1E92B8FD0022F452 /* FlexiblePageControl.h */,
+				D4DC6C6B1E92C7190022F452 /* FlexiblePageControl.swift */,
 				D4DC6C3F1E92B8FD0022F452 /* Info.plist */,
 			);
 			path = FlexiblePageControl;
@@ -144,6 +148,7 @@
 				TargetAttributes = {
 					D4DC6C3A1E92B8FD0022F452 = {
 						CreatedOnToolsVersion = 8.2.1;
+						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 					};
 					D4DC6C491E92B9300022F452 = {
@@ -195,6 +200,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4DC6C6C1E92C7190022F452 /* FlexiblePageControl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +208,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4DC6C6D1E92C73B0022F452 /* FlexiblePageControl.swift in Sources */,
 				D4DC6C4F1E92B9310022F452 /* ViewController.swift in Sources */,
 				D4DC6C4D1E92B9310022F452 /* AppDelegate.swift in Sources */,
 			);
@@ -323,6 +330,7 @@
 		D4DC6C441E92B8FD0022F452 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -334,6 +342,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shimaApps.FlexiblePageControl;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -341,6 +350,7 @@
 		D4DC6C451E92B8FD0022F452 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -399,6 +409,7 @@
 				D4DC6C451E92B8FD0022F452 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D4DC6C591E92B9310022F452 /* Build configuration list for PBXNativeTarget "Demo" */ = {
 			isa = XCConfigurationList;
@@ -407,6 +418,7 @@
 				D4DC6C5B1E92B9310022F452 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

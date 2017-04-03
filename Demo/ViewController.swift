@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    let pageControl = FlexiblePageControl()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
