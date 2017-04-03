@@ -9,11 +9,9 @@
 
 import UIKit
 
-class PageControlView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+public class PageControlView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    private var collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout())
-    
-    var selectedPage: Int = 0 {
+    public var selectedPage: Int = 0 {
         didSet {
             
             for row in 0..<pageCount {
@@ -41,17 +39,24 @@ class PageControlView: UIView, UICollectionViewDataSource, UICollectionViewDeleg
         }
     }
     
-    let pageCount: Int
+    private let pageCount: Int
     
-    let dotRadius: CGFloat
+    private let dotRadius: CGFloat
     
-    let dotSpace: CGFloat
+    private let dotSpace: CGFloat
     
-    let itemRadius: CGFloat
+    private let itemRadius: CGFloat
     
-    let displayCount: Int
+    private let displayCount: Int
     
-    init(dotRadius: CGFloat, pageCount: Int, dotSpace: CGFloat, displayCount: Int = 5) {
+    private let selectedColor: UIColor
+    
+    private let unSelectedColoir: UIColor
+    
+    private var collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout())
+    
+    
+    public init(dotRadius: CGFloat, pageCount: Int, dotSpace: CGFloat, displayCount: Int = 5, selectedColor: UIColor = .darkGray, unSelectedColor: UIColor = .lightGray) {
         
         self.pageCount = pageCount
         self.dotRadius = dotRadius
@@ -59,8 +64,12 @@ class PageControlView: UIView, UICollectionViewDataSource, UICollectionViewDeleg
         self.displayCount = displayCount
         self.itemRadius = dotRadius + dotSpace
         
+        self.selectedColor = selectedColor
+        self.unSelectedColoir = unSelectedColor
+        
         let size = CGSize(width: itemRadius*CGFloat(displayCount), height: itemRadius)
         let frame = CGRect(origin: CGPoint.zero, size: size)
+        
         super.init(frame: frame)
         
         let layout = UICollectionViewFlowLayout()
@@ -69,11 +78,14 @@ class PageControlView: UIView, UICollectionViewDataSource, UICollectionViewDeleg
         layout.minimumLineSpacing = 0
         layout.scrollDirection = .horizontal
         
-        collectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: itemRadius*CGFloat(displayCount), height: itemRadius), collectionViewLayout: layout)
-        self.addSubview(collectionView)
+        collectionView = UICollectionView(
+            frame: CGRect(x: 0, y: 0, width: itemRadius*CGFloat(displayCount), height: itemRadius),
+            collectionViewLayout: layout
+        )
+        addSubview(collectionView)
     }
     
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         
         collectionView.center = CGPoint(x: bounds.width/2, y: bounds.height/2)
@@ -83,7 +95,7 @@ class PageControlView: UIView, UICollectionViewDataSource, UICollectionViewDeleg
         collectionView.register(PageCell.self, forCellWithReuseIdentifier: "cell")
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -114,30 +126,30 @@ class PageControlView: UIView, UICollectionViewDataSource, UICollectionViewDeleg
     
     // MARK: UICollectionViewDataSource
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    public func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return pageCount
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         print(indexPath.row)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PageCell
         cell.setup(dotRadius: dotRadius)
+        cell.selectedColor = selectedColor
+        cell.unSelectedColor = unSelectedColoir
         cell.isSelected = (selectedPage == indexPath.row) ? true : false
         return cell
     }
 }
 
 
-
-
-class PageCell: UICollectionViewCell {
+private class PageCell: UICollectionViewCell {
     
-    let selectedColor = UIColor.darkGray
-    let unSelectedColor = UIColor.lightGray
+    public var selectedColor = UIColor.darkGray
+    public var unSelectedColor = UIColor.lightGray
     
     enum DotSize {
         case Tiny
@@ -154,7 +166,7 @@ class PageCell: UICollectionViewCell {
         }
     }
     
-    override var isSelected: Bool {
+    public override var isSelected: Bool {
         didSet {
             updateDot(selected: isSelected)
         }
@@ -175,7 +187,7 @@ class PageCell: UICollectionViewCell {
         dot.layer.cornerRadius = dotRadius/2
         dot.layer.masksToBounds = true
         
-        self.addSubview(dot)
+        addSubview(dot)
         
         updateDot(selected: false)
     }
