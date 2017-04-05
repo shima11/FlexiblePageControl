@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController, UIScrollViewDelegate {
     
-    let pageControl = PageControlView(
+    let pageControl_collection = PageControlView(
         dotRadius: 6,
         pageCount: 10,
         dotSpace: 4,
@@ -18,6 +18,16 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         selectedColor: .orange,
         unSelectedColor: .lightGray
     )
+    
+    let pageControl_scroll = PageControl(
+        dotSize: 6,
+        pageCount: 10,
+        dotSpace: 4,
+        displayCount: 6,
+        selectedColor: .orange,
+        unSelectedColor: .lightGray
+    )
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,18 +44,20 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: scrollSize*numberOfPages, height: scrollSize)
         scrollView.isPagingEnabled = true
         
-        pageControl.center = CGPoint(x: scrollView.center.x, y: scrollView.frame.maxY + 16)
+//        pageControl_collection.center = CGPoint(x: scrollView.center.x, y: scrollView.frame.maxY + 16)
+        pageControl_scroll.center = CGPoint(x: scrollView.center.x, y: scrollView.frame.maxY + 16)
         
         view.addSubview(scrollView)
-        view.addSubview(pageControl)
+//        view.addSubview(pageControl_collection)
+        view.addSubview(pageControl_scroll)
         
     }
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        print("did end decelerating")
-        pageControl.selectedPage = Int(scrollView.contentOffset.x/300)
+//        pageControl_collection.selectedPage = Int(scrollView.contentOffset.x/300)
+        pageControl_scroll.selectedPage = Int(scrollView.contentOffset.x/300)
     }
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        print("did scroll")
-    }
+    
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//    }
 }
 
