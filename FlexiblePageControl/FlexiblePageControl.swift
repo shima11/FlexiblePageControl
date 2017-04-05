@@ -9,33 +9,16 @@
 
 import UIKit
 
-public class PageControlView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+public class PageControlView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     public var selectedPage: Int = 0 {
         didSet {
-            
             for row in 0..<pageCount {
-                
                 // dot color
                 updateDotSelected(row: row, selectedPage: selectedPage)
-                
-//                    // dot size
-//                if let cell = cell as? PageCell {
-//                    if (selectedPage - row) < -3 || (selectedPage - row) > 3 {
-//                        cell.size = PageCell.DotSize.Small
-//                    } else if (selectedPage - row) < -2 || (selectedPage - row) > 2 {
-//                        cell.size = PageCell.DotSize.Medium
-//                    } else {
-//                        cell.size = PageCell.DotSize.Large
-//                    }
-//                }
             }
-            
-            // dotの移動
+            // dot move
             updateDotPosition(selectedPage: selectedPage)
-            
-            let displayCells = collectionView.visibleCells
-            print("displaycell:\(displayCells.count)")
         }
     }
     
@@ -55,8 +38,14 @@ public class PageControlView: UIView, UICollectionViewDataSource, UICollectionVi
     
     private var collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout())
     
+    private let cellIdentifier = "cell"
     
-    public init(dotRadius: CGFloat, pageCount: Int, dotSpace: CGFloat, displayCount: Int = 5, selectedColor: UIColor = .darkGray, unSelectedColor: UIColor = .lightGray) {
+    public init(dotRadius: CGFloat,
+                pageCount: Int,
+                dotSpace: CGFloat,
+                displayCount: Int = 5,
+                selectedColor: UIColor = .darkGray,
+                unSelectedColor: UIColor = .lightGray) {
         
         self.pageCount = pageCount
         self.dotRadius = dotRadius
@@ -72,6 +61,8 @@ public class PageControlView: UIView, UICollectionViewDataSource, UICollectionVi
         
         super.init(frame: frame)
         
+        backgroundColor = UIColor.clear
+        
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: itemRadius, height: itemRadius)
         layout.minimumInteritemSpacing = 0
@@ -82,6 +73,12 @@ public class PageControlView: UIView, UICollectionViewDataSource, UICollectionVi
             frame: CGRect(x: 0, y: 0, width: itemRadius*CGFloat(displayCount), height: itemRadius),
             collectionViewLayout: layout
         )
+        collectionView.backgroundColor = UIColor.clear
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.isUserInteractionEnabled = false
+        collectionView.register(PageCell.self, forCellWithReuseIdentifier: cellIdentifier)
+
         addSubview(collectionView)
     }
     
@@ -89,10 +86,12 @@ public class PageControlView: UIView, UICollectionViewDataSource, UICollectionVi
         super.layoutSubviews()
         
         collectionView.center = CGPoint(x: bounds.width/2, y: bounds.height/2)
-        collectionView.backgroundColor = UIColor.clear
-        collectionView.dataSource = self
-        collectionView.isUserInteractionEnabled = false
-        collectionView.register(PageCell.self, forCellWithReuseIdentifier: "cell")
+    }
+    
+    public override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        
+        updateDotSize(selectedPage: selectedPage)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -104,7 +103,7 @@ public class PageControlView: UIView, UICollectionViewDataSource, UICollectionVi
         let cell = collectionView.cellForItem(at: indexPath)
         cell?.isSelected = (row == selectedPage) ? true : false
     }
-    
+
     private func updateDotPosition(selectedPage: Int) {
         
         if selectedPage > 0 && selectedPage < pageCount-1 {
@@ -124,24 +123,53 @@ public class PageControlView: UIView, UICollectionViewDataSource, UICollectionVi
         }
     }
     
-    // MARK: UICollectionViewDataSource
-    
-    public func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+    private func updateDotSize(selectedPage: Int) {
+        
+        let displayCells = collectionView.visibleCells.filter {
+            collectionView.bounds.contains($0.frame)
+        }
+        guard let cells = displayCells as? [PageCell] else { return }
+        let indexs = cells.map { $0.index }
+        let min = indexs.min()
+        let max = indexs.max()
+        
+        for cell in cells {
+            if cell.index == selectedPage {
+                cell.state = PageCell.DotSize.Large
+            }
+            else if cell.index == 0 || cell.index == pageCount - 1 {
+                cell.state = PageCell.DotSize.Large
+            }
+            else if cell.index == min || cell.index == max {
+                cell.state = PageCell.DotSize.Small
+            }
+            else {
+                cell.state = PageCell.DotSize.Large
+            }
+        }
     }
+    
+    // MARK: UICollectionViewDataSource
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return pageCount
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        print(indexPath.row)
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PageCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! PageCell
         cell.setup(dotRadius: dotRadius)
+        cell.index = indexPath.row
         cell.selectedColor = selectedColor
         cell.unSelectedColor = unSelectedColoir
         cell.isSelected = (selectedPage == indexPath.row) ? true : false
         return cell
+    }
+    
+    // MARK: UICollectionViewDelegate
+    
+    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        // dot size
+        updateDotSize(selectedPage: selectedPage)
     }
 }
 
@@ -150,6 +178,8 @@ private class PageCell: UICollectionViewCell {
     
     public var selectedColor = UIColor.darkGray
     public var unSelectedColor = UIColor.lightGray
+    
+    public var index: Int = 0
     
     enum DotSize {
         case Tiny
@@ -172,11 +202,15 @@ private class PageCell: UICollectionViewCell {
         }
     }
     
+    private var dotRadius: CGFloat = 0.0
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
     func setup(dotRadius: CGFloat = 4.0) {
+        
+        self.dotRadius = dotRadius
         
         let size = CGSize(width: dotRadius, height: dotRadius)
         let point = CGPoint(x: bounds.width/2, y: bounds.height/2)
@@ -203,17 +237,17 @@ private class PageCell: UICollectionViewCell {
     func updateSize(size: DotSize) {
         var dotSize: CGSize
         
-        let dotWidth = dot.bounds.width
+        let dotWidth = dotRadius
         
         switch size {
         case .Large:
             dotSize = CGSize(width: dotWidth, height: dotWidth)
         case .Medium:
-            dotSize = CGSize(width: dotWidth*0.7, height: dotWidth*0.7)
+            dotSize = CGSize(width: dotWidth*0.9, height: dotWidth*0.9)
         case .Small:
-            dotSize = CGSize(width: dotWidth*0.5, height: dotWidth*0.5)
+            dotSize = CGSize(width: dotWidth*0.7, height: dotWidth*0.7)
         case .Tiny:
-            dotSize = CGSize(width: dotWidth*0.3, height: dotWidth*0.3)
+            dotSize = CGSize(width: dotWidth*0.5, height: dotWidth*0.5)
         }
         
         dot.frame = CGRect(origin: CGPoint.zero, size: dotSize)

@@ -14,7 +14,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         dotRadius: 6,
         pageCount: 10,
         dotSpace: 4,
-        displayCount: 5,
+        displayCount: 6,
         selectedColor: .orange,
         unSelectedColor: .lightGray
     )
@@ -24,14 +24,14 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         
         let numberOfPages = 10
         
-        let size = 300
+        let scrollSize = 300
         
         let scrollView = UIScrollView()
         scrollView.delegate = self
         scrollView.backgroundColor = UIColor.lightGray
-        scrollView.frame = CGRect(x: 0, y: 0, width: size, height: size)
+        scrollView.frame = CGRect(x: 0, y: 0, width: scrollSize, height: scrollSize)
         scrollView.center = view.center
-        scrollView.contentSize = CGSize(width: size*numberOfPages, height: size)
+        scrollView.contentSize = CGSize(width: scrollSize*numberOfPages, height: scrollSize)
         scrollView.isPagingEnabled = true
         
         pageControl.center = CGPoint(x: scrollView.center.x, y: scrollView.frame.maxY + 16)
@@ -40,9 +40,12 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         view.addSubview(pageControl)
         
     }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        print("did end decelerating")
         pageControl.selectedPage = Int(scrollView.contentOffset.x/300)
+    }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        print("did scroll")
     }
 }
 
