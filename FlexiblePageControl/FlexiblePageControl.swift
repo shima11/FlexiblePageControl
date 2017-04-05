@@ -59,6 +59,11 @@ public class PageControlView: UIView, UICollectionViewDataSource, UICollectionVi
         let size = CGSize(width: itemRadius*CGFloat(displayCount), height: itemRadius)
         let frame = CGRect(origin: CGPoint.zero, size: size)
         
+        if pageCount < 2 {
+            super.init(frame: CGRect.zero)
+            return
+        }
+        
         super.init(frame: frame)
         
         backgroundColor = UIColor.clear
@@ -112,13 +117,28 @@ public class PageControlView: UIView, UICollectionViewDataSource, UICollectionVi
                 let pointX = collectionView.contentOffset.x - itemRadius
                 let pointY = collectionView.contentOffset.y
                 let point = CGPoint(x: pointX, y: pointY)
-                collectionView.setContentOffset(point, animated: true)
+//                collectionView.setContentOffset(point, animated: true)
+                
+                UIView.animate(withDuration: 0.3, animations: { [unowned self] in
+                    self.collectionView.contentOffset = point
+//                    self.updateDotSize(selectedPage: selectedPage, direction: PageControlView.MoveDirection.Right)
+                })
+//                UIView.animate(withDuration: 0.2, delay: 0.1, options: [], animations: { [unowned self] in
+//                    self.updateDotSize(selectedPage: selectedPage, direction: PageControlView.MoveDirection.Right)
+//                    }, completion: nil)
             }
             else if itemRadius * CGFloat(selectedPage) + itemRadius >= collectionView.contentOffset.x + collectionView.bounds.width { // right side
                 let pointX = collectionView.contentOffset.x + itemRadius
                 let pointY = collectionView.contentOffset.y
                 let point = CGPoint(x: pointX, y: pointY)
-                collectionView.setContentOffset(point, animated: true)
+//                collectionView.setContentOffset(point, animated: true)
+                
+                UIView.animate(withDuration: 0.3, animations: { [unowned self] in
+                    self.collectionView.contentOffset = point
+                })
+//                UIView.animate(withDuration: 0.2, delay: 0.1, options: [], animations: { [unowned self] in
+//                    self.updateDotSize(selectedPage: selectedPage, direction: PageControlView.MoveDirection.Left)
+//                }, completion: nil)
             }
         }
     }
@@ -149,6 +169,61 @@ public class PageControlView: UIView, UICollectionViewDataSource, UICollectionVi
         }
     }
     
+    private enum MoveDirection {
+        case Right
+        case Left
+    }
+    
+    private func updateDotSize(selectedPage: Int, direction: MoveDirection) {
+        
+        let displayCells = collectionView.visibleCells.filter {
+            collectionView.bounds.contains($0.frame)
+        }
+        guard let cells = displayCells as? [PageCell] else { return }
+        
+        for cell in cells {
+            if cell.index == selectedPage {
+                cell.state = PageCell.DotSize.Large
+            }
+                //            else if cell.index == 0 || cell.index == pageCount - 1 {
+                //                cell.state = PageCell.DotSize.Large
+                //            }
+                //            else if cell.index == min || cell.index == max {
+                //                cell.state = PageCell.DotSize.Small
+                //            }
+            else {
+                cell.state = PageCell.DotSize.Large
+            }
+        }
+        
+        let indexs = cells.map { $0.index }
+
+        var min: Int = 0
+        var max: Int = 0
+        
+        switch direction {
+        case .Right:
+            min = (indexs.min() ?? 1)
+            max = (indexs.max() ?? 1)
+        case .Left:
+            min = (indexs.min() ?? 0)
+            max = (indexs.max() ?? 0)
+        }
+        
+        let minIndex = IndexPath(row: min, section: 0)
+        let minCell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: minIndex)
+        let maxIndex = IndexPath(row: max, section: 0)
+        let maxCell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: maxIndex)
+        
+        if let cell = minCell as? PageCell {
+            cell.state = PageCell.DotSize.Small
+        }
+        if let cell = maxCell as? PageCell {
+            cell.state = PageCell.DotSize.Small
+        }
+    }
+
+    
     // MARK: UICollectionViewDataSource
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -169,8 +244,16 @@ public class PageControlView: UIView, UICollectionViewDataSource, UICollectionVi
     
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         // dot size
+//        updateDotSize(selectedPage: selectedPage)
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let cell = cell as? PageCell {
+            cell.state = PageCell.DotSize.Small
+        }
         updateDotSize(selectedPage: selectedPage)
     }
+    
 }
 
 
