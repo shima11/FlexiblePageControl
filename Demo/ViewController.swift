@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController, UIScrollViewDelegate {
     
-    let pageControl_collection = PageControlView(
+    let pageControl_collection = PageControlView_CollectionVeiw(
         dotRadius: 6,
         pageCount: 10,
         dotSpace: 4,
@@ -19,7 +19,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         unSelectedColor: .lightGray
     )
     
-    let pageControl_scroll = PageControl(
+    let pageControl_scroll = PageControlView_ScrollView(
         dotSize: 6,
         pageCount: 10,
         dotSpace: 4,
@@ -27,7 +27,6 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         selectedColor: .orange,
         unSelectedColor: .lightGray
     )
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,12 +51,10 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         view.addSubview(pageControl_scroll)
         
     }
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
 //        pageControl_collection.selectedPage = Int(scrollView.contentOffset.x/300)
         pageControl_scroll.selectedPage = Int(scrollView.contentOffset.x/300)
     }
     
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//    }
 }
-

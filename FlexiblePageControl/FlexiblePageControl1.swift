@@ -9,7 +9,7 @@
 
 import UIKit
 
-public class PageControlView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+public class PageControlView_CollectionVeiw: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     public var selectedPage: Int = 0 {
         didSet {
