@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class PageControlView_ScrollView: UIView {
+public class PageControlView_ScrollView: UIView, UIScrollViewDelegate {
     
     public var selectedPage: Int = 0 {
         didSet {
@@ -16,6 +16,8 @@ public class PageControlView_ScrollView: UIView {
             updateDotClor(selectedPage: selectedPage)
             
             if canScroll {
+                updateDotSize(selectedPage: selectedPage)
+
                 updateDotPosition(selectedPage: selectedPage, animated: true)
             }
         }
@@ -82,6 +84,7 @@ public class PageControlView_ScrollView: UIView {
         backgroundColor = UIColor.clear
         
         scrollView.backgroundColor = UIColor.clear
+        scrollView.delegate = self
         scrollView.isUserInteractionEnabled = false
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.contentSize = CGSize(width: itemSize*CGFloat(pageCount), height: itemSize)
@@ -97,6 +100,7 @@ public class PageControlView_ScrollView: UIView {
         
         updateDotClor(selectedPage: selectedPage)
         updateDotPosition(selectedPage: 0, animated: false)
+        updateDotSize(selectedPage: 0)
 
     }
     
@@ -143,12 +147,37 @@ public class PageControlView_ScrollView: UIView {
             let position = CGPoint(x: x, y: y)
             scrollView.setContentOffset(position, animated: animated)
         }
-        else if CGFloat(selectedPage) * itemSize + itemSize >= scrollView.contentOffset.x + scrollView.bounds.width || scrollView.contentOffset.x < 0 {
+        else if CGFloat(selectedPage) * itemSize + itemSize >= scrollView.contentOffset.x + scrollView.bounds.width {
             let x = scrollView.contentOffset.x + itemSize
             let y = scrollView.contentOffset.y
             let position = CGPoint(x: x, y: y)
             scrollView.setContentOffset(position, animated: animated)
         }
+    }
+    
+    private func updateDotSize(selectedPage: Int) {
+        
+        for index in 0..<pageCount {
+            
+            let item = items[index]
+            
+            if index == selectedPage {
+                item.state = .Normal
+            }
+            else if item.frame.minX <= scrollView.contentOffset.x {
+                item.state = .Small
+            }
+            else if item.frame.maxX >= scrollView.contentOffset.x + scrollView.bounds.width {
+                item.state = .Small
+            }
+            else {
+                item.state = .Normal
+            }
+        }
+    }
+    
+    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        updateDotSize(selectedPage: selectedPage)
     }
     
 }
