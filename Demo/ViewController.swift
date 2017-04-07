@@ -16,16 +16,14 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         dotSpace: 4,
         displayCount: 6,
         selectedColor: .orange,
-        unSelectedColor: .lightGray
+        unSelectedColor: .groupTableViewBackground
     )
     
     let pageControl_scroll = PageControlView_ScrollView(
         dotSize: 6,
         pageCount: 10,
         dotSpace: 4,
-        displayCount: 6,
-        selectedColor: .orange,
-        unSelectedColor: .lightGray
+        displayCount: 7
     )
 
     override func viewDidLoad() {
@@ -43,17 +41,17 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: scrollSize*numberOfPages, height: scrollSize)
         scrollView.isPagingEnabled = true
         
-//        pageControl_collection.center = CGPoint(x: scrollView.center.x, y: scrollView.frame.maxY + 16)
-        pageControl_scroll.center = CGPoint(x: scrollView.center.x, y: scrollView.frame.maxY + 16)
+        pageControl_collection.center = CGPoint(x: scrollView.center.x, y: scrollView.frame.maxY + 16)
+        pageControl_scroll.center = CGPoint(x: scrollView.center.x, y: pageControl_collection.frame.maxY + 16)
         
         view.addSubview(scrollView)
-//        view.addSubview(pageControl_collection)
+        view.addSubview(pageControl_collection)
         view.addSubview(pageControl_scroll)
         
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        pageControl_collection.selectedPage = Int(scrollView.contentOffset.x/300)
+        pageControl_collection.selectedPage = Int(scrollView.contentOffset.x/300)
         pageControl_scroll.selectedPage = Int(scrollView.contentOffset.x/300)
     }
     
