@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController, UIScrollViewDelegate {
     
-    let pageControl_scroll = PageControlView_ScrollView(
+    let pageControl_scroll = FlexiblePageControl(
         pageCount: 10,
         dotSize: 6,
         dotSpace: 4

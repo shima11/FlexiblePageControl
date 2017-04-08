@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class PageControlView_ScrollView: UIView, UIScrollViewDelegate {
+public class FlexiblePageControl: UIView, UIScrollViewDelegate {
     
     public var selectedPage: Int = 0 {
         didSet {
