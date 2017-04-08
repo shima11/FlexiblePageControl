@@ -191,6 +191,7 @@
 					};
 					D4DC6C491E92B9300022F452 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 64T4PJ8WCZ;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -418,6 +419,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 64T4PJ8WCZ;
 				INFOPLIST_FILE = Demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shimaApps.Demo;
@@ -430,6 +432,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 64T4PJ8WCZ;
 				INFOPLIST_FILE = Demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shimaApps.Demo;
