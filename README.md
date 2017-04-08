@@ -6,6 +6,7 @@ A flexible PageControl like Instagram.
  
 # OverView
 
+![](demo.gif)
 
 # Install
 
