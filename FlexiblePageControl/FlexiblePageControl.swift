@@ -104,11 +104,12 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
     
     public func setProgress(contentOffsetX: CGFloat, pageWidth: CGFloat) {
         let selectedPage = Int(round(contentOffsetX/pageWidth))
+        if selectedPage == self.selectedPage { return }
         setSelectedPage(selectedPage: selectedPage, animated: true)
     }
     
     private func setSelectedPage(selectedPage: Int, animated: Bool) {
-        
+
         self.selectedPage = selectedPage
         
         updateDotClor(selectedPage: selectedPage)
