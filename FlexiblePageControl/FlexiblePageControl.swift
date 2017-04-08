@@ -17,6 +17,10 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
     // boundary value of display count
     public var boundaryValue = 7
     
+    public override var intrinsicContentSize: CGSize {
+        return CGSize(width: itemSize*CGFloat(displayCount), height: itemSize)
+    }
+    
     private let scrollView: UIScrollView
     
     private var selectedPage: Int = 0
@@ -90,6 +94,12 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        scrollView.center = CGPoint(x: bounds.width/2, y: bounds.height/2)
     }
     
     public func setProgress(contentOffsetX: CGFloat, pageWidth: CGFloat) {
