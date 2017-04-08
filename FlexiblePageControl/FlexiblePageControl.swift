@@ -16,9 +16,7 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
             updateDotClor(selectedPage: selectedPage)
             
             if canScroll {
-                
                 updateDotPosition(selectedPage: selectedPage, animated: true)
-                
                 updateDotSize(selectedPage: selectedPage)
             }
         }
@@ -28,6 +26,9 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
     
     public var unSelectedColor = UIColor(red:0.86, green:0.86, blue:0.86, alpha:1.00)
 
+    // boundary value of display count
+    public var boundaryValue = 7
+    
     private let scrollView: UIScrollView
 
     private let pageCount: Int
@@ -43,8 +44,6 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
     private let canScroll: Bool
     
     private let displayCount: Int
-
-    private let _displayCount = 7
     
     public init(pageCount: Int,
                 dotSize: CGFloat,
@@ -62,7 +61,7 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
         }
         self.items = items
         
-        self.displayCount = (pageCount >= _displayCount) ? _displayCount : pageCount
+        self.displayCount = (pageCount >= boundaryValue) ? boundaryValue : pageCount
         
         self.canScroll = (pageCount > displayCount) ? true : false
 
@@ -86,7 +85,7 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
         scrollView.isUserInteractionEnabled = false
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.contentSize = CGSize(width: itemSize*CGFloat(pageCount), height: itemSize)
-        if displayCount < pageCount && displayCount >= _displayCount {
+        if displayCount < pageCount && displayCount >= boundaryValue {
             scrollView.contentInset = UIEdgeInsets(top: 0, left: itemSize*2, bottom: 0, right: itemSize*2)
         }
         
@@ -97,9 +96,11 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
         }
         
         updateDotClor(selectedPage: selectedPage)
-        updateDotPosition(selectedPage: 0, animated: false)
-        updateDotSize(selectedPage: 0)
-
+        
+        if canScroll {
+            updateDotPosition(selectedPage: 0, animated: false)
+            updateDotSize(selectedPage: 0)
+        }
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -120,27 +121,29 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
     
     private func updateDotPosition(selectedPage: Int, animated: Bool) {
 
+        let duration = animated ? 0.3 : 0
+        
         if selectedPage == 0 {
             let x = -scrollView.contentInset.left
-            UIView.animate(withDuration: 0.3, animations: { [unowned self] in
+            UIView.animate(withDuration: duration, animations: { [unowned self] in
                 self.scrollView.contentOffset.x = x
             })
         }
         else if selectedPage == pageCount - 1 {
             let x = scrollView.contentSize.width - scrollView.bounds.width + scrollView.contentInset.right
-            UIView.animate(withDuration: 0.3, animations: { [unowned self] in
+            UIView.animate(withDuration: duration, animations: { [unowned self] in
                 self.scrollView.contentOffset.x = x
             })
         }
         else if CGFloat(selectedPage) * itemSize <= scrollView.contentOffset.x + itemSize {
             let x = scrollView.contentOffset.x - itemSize
-            UIView.animate(withDuration: 0.3, animations: { [unowned self] in
+            UIView.animate(withDuration: duration, animations: { [unowned self] in
                 self.scrollView.contentOffset.x = x
             })
         }
         else if CGFloat(selectedPage) * itemSize + itemSize >= scrollView.contentOffset.x + scrollView.bounds.width - itemSize {
             let x = scrollView.contentOffset.x + itemSize
-            UIView.animate(withDuration: 0.3, animations: { [unowned self] in
+            UIView.animate(withDuration: duration, animations: { [unowned self] in
                 self.scrollView.contentOffset.x = x
             })
         }
