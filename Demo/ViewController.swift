@@ -43,8 +43,8 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        pageControl.selectedPage = Int(scrollView.contentOffset.x/scrollSize)
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        pageControl.setProgress(contentOffsetX: scrollView.contentOffset.x, pageWidth: scrollView.bounds.width)
     }
     
 }

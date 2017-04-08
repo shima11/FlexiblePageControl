@@ -10,18 +10,6 @@ import UIKit
 
 public class FlexiblePageControl: UIView, UIScrollViewDelegate {
     
-    public var selectedPage: Int = 0 {
-        didSet {
-            
-            updateDotClor(selectedPage: selectedPage)
-            
-            if canScroll {
-                updateDotPosition(selectedPage: selectedPage, animated: true)
-                updateDotSize(selectedPage: selectedPage)
-            }
-        }
-    }
-    
     public var selectedColor = UIColor(red:0.32, green:0.59, blue:0.91, alpha:1.00)
     
     public var unSelectedColor = UIColor(red:0.86, green:0.86, blue:0.86, alpha:1.00)
@@ -30,6 +18,8 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
     public var boundaryValue = 7
     
     private let scrollView: UIScrollView
+    
+    private var selectedPage: Int = 0
 
     private let pageCount: Int
     
@@ -95,21 +85,28 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
             scrollView.addSubview(items[i])
         }
         
-        updateDotClor(selectedPage: selectedPage)
-        
-        if canScroll {
-            updateDotPosition(selectedPage: 0, animated: false)
-            updateDotSize(selectedPage: 0)
-        }
+        setSelectedPage(selectedPage: 0, animated: false)
     }
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override public func layoutSubviews() {
-        super.layoutSubviews()
+    public func setProgress(contentOffsetX: CGFloat, pageWidth: CGFloat) {
+        let selectedPage = Int(round(contentOffsetX/pageWidth))
+        setSelectedPage(selectedPage: selectedPage, animated: true)
+    }
+    
+    private func setSelectedPage(selectedPage: Int, animated: Bool) {
         
+        self.selectedPage = selectedPage
+        
+        updateDotClor(selectedPage: selectedPage)
+        
+        if canScroll {
+            updateDotPosition(selectedPage: selectedPage, animated: animated)
+            updateDotSize(selectedPage: selectedPage)
+        }
     }
     
     private func updateDotClor(selectedPage: Int) {
