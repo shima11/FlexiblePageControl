@@ -1,0 +1,10 @@
+framework module FlexiblePageControl {
+  umbrella header "FlexiblePageControl.h"
+
+  export *
+  module * { export * }
+}
+
+module FlexiblePageControl.Swift {
+    header "FlexiblePageControl-Swift.h"
+}
