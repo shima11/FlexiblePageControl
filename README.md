@@ -34,10 +34,13 @@ let pageControl = FlexiblePageControl(
     )
 view.addSubview(pageControl)
 ````
-Update page
-````
-pageControl.selectedPage = page
 
+update page
+
+````
+func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        pageControl.setProgress(contentOffsetX: scrollView.contentOffset.x, pageWidth: scrollView.bounds.width)
+    }
 ````
 
 # Licence
