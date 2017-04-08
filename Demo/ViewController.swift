@@ -20,10 +20,9 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     )
     
     let pageControl_scroll = PageControlView_ScrollView(
-        dotSize: 6,
         pageCount: 10,
-        dotSpace: 4,
-        displayCount: 7
+        dotSize: 6,
+        dotSpace: 4
     )
 
     override func viewDidLoad() {

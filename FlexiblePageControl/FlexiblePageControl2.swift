@@ -16,6 +16,7 @@ public class PageControlView_ScrollView: UIView, UIScrollViewDelegate {
             updateDotClor(selectedPage: selectedPage)
             
             if canScroll {
+                
                 updateDotPosition(selectedPage: selectedPage, animated: true)
                 
                 updateDotSize(selectedPage: selectedPage)
@@ -23,9 +24,9 @@ public class PageControlView_ScrollView: UIView, UIScrollViewDelegate {
         }
     }
     
-    public var selectedColor = UIColor(red:0.35, green:0.78, blue:0.98, alpha:1.00)
+    public var selectedColor = UIColor(red:0.32, green:0.59, blue:0.91, alpha:1.00)
     
-    public var unSelectedColoir = UIColor(red:0.88, green:0.88, blue:0.88, alpha:1.00)
+    public var unSelectedColor = UIColor(red:0.86, green:0.86, blue:0.86, alpha:1.00)
 
     private let scrollView: UIScrollView
 
@@ -37,23 +38,23 @@ public class PageControlView_ScrollView: UIView, UIScrollViewDelegate {
     
     private let itemSize: CGFloat
     
-    private let displayCount: Int
-    
     private let items:[ItemView]
     
     private let canScroll: Bool
     
-    public init(dotSize: CGFloat,
-                pageCount: Int,
-                dotSpace: CGFloat,
-                displayCount: Int = 5) {
+    private let displayCount: Int
+
+    private let _displayCount = 7
+    
+    public init(pageCount: Int,
+                dotSize: CGFloat,
+                dotSpace: CGFloat) {
         
         self.pageCount = pageCount
         self.dotSize = dotSize
         self.dotSpace = dotSpace
-        self.displayCount = displayCount
         self.itemSize = dotSize + dotSpace
-
+        
         var items:[ItemView] = []
         for index in 0..<pageCount {
             let item = ItemView(itemSize: itemSize, dotSize: dotSize, index: index)
@@ -61,8 +62,10 @@ public class PageControlView_ScrollView: UIView, UIScrollViewDelegate {
         }
         self.items = items
         
-        self.canScroll = (displayCount < pageCount) ? true : false
+        self.displayCount = (pageCount >= _displayCount) ? _displayCount : pageCount
         
+        self.canScroll = (pageCount > displayCount) ? true : false
+
         if pageCount < 2 {
             scrollView = UIScrollView()
             super.init(frame: CGRect.zero)
@@ -83,7 +86,7 @@ public class PageControlView_ScrollView: UIView, UIScrollViewDelegate {
         scrollView.isUserInteractionEnabled = false
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.contentSize = CGSize(width: itemSize*CGFloat(pageCount), height: itemSize)
-        if displayCount < pageCount && displayCount > 4 {
+        if displayCount < pageCount && displayCount >= _displayCount {
             scrollView.contentInset = UIEdgeInsets(top: 0, left: itemSize*2, bottom: 0, right: itemSize*2)
         }
         
@@ -111,14 +114,7 @@ public class PageControlView_ScrollView: UIView, UIScrollViewDelegate {
     private func updateDotClor(selectedPage: Int) {
      
         for index in 0..<pageCount {
-            if index == selectedPage {
-                items[index].dotColor = selectedColor
-                items[index].state = .Normal
-            }
-            else {
-                items[index].dotColor = unSelectedColoir
-                items[index].state = .Small
-            }
+            items[index].dotColor = (index == selectedPage) ? selectedColor : unSelectedColor
         }
     }
     
@@ -126,36 +122,24 @@ public class PageControlView_ScrollView: UIView, UIScrollViewDelegate {
 
         if selectedPage == 0 {
             let x = -scrollView.contentInset.left
-//            let y = scrollView.contentOffset.y
-//            let point = CGPoint(x: x, y: y)
-//            scrollView.setContentOffset(point, animated: animated)
             UIView.animate(withDuration: 0.3, animations: { [unowned self] in
                 self.scrollView.contentOffset.x = x
             })
         }
         else if selectedPage == pageCount - 1 {
             let x = scrollView.contentSize.width - scrollView.bounds.width + scrollView.contentInset.right
-//            let y = scrollView.contentOffset.y
-//            let point = CGPoint(x: x, y: y)
-//            scrollView.setContentOffset(point, animated: animated)
             UIView.animate(withDuration: 0.3, animations: { [unowned self] in
                 self.scrollView.contentOffset.x = x
             })
         }
         else if CGFloat(selectedPage) * itemSize <= scrollView.contentOffset.x + itemSize {
             let x = scrollView.contentOffset.x - itemSize
-//            let y = scrollView.contentOffset.y
-//            let position = CGPoint(x: x, y: y)
-//            scrollView.setContentOffset(position, animated: animated)
             UIView.animate(withDuration: 0.3, animations: { [unowned self] in
                 self.scrollView.contentOffset.x = x
             })
         }
         else if CGFloat(selectedPage) * itemSize + itemSize >= scrollView.contentOffset.x + scrollView.bounds.width - itemSize {
             let x = scrollView.contentOffset.x + itemSize
-//            let y = scrollView.contentOffset.y
-//            let position = CGPoint(x: x, y: y)
-//            scrollView.setContentOffset(position, animated: animated)
             UIView.animate(withDuration: 0.3, animations: { [unowned self] in
                 self.scrollView.contentOffset.x = x
             })
@@ -171,15 +155,19 @@ public class PageControlView_ScrollView: UIView, UIScrollViewDelegate {
             if index == selectedPage {
                 item.state = .Normal
             }
+            // first dot from left
             else if item.frame.minX <= scrollView.contentOffset.x {
                 item.state = .Small
             }
+            // first dot from right
             else if item.frame.maxX >= scrollView.contentOffset.x + scrollView.bounds.width {
                 item.state = .Small
             }
+            // second dot from left
             else if item.frame.minX <= scrollView.contentOffset.x + itemSize {
                 item.state = .Medium
             }
+            // second dot from right
             else if item.frame.maxX >= scrollView.contentOffset.x + scrollView.bounds.width - itemSize {
                 item.state = .Medium
             }
@@ -188,11 +176,6 @@ public class PageControlView_ScrollView: UIView, UIScrollViewDelegate {
             }
         }
     }
-    
-    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        updateDotSize(selectedPage: selectedPage)
-    }
-    
 }
 
 
@@ -209,6 +192,7 @@ private class ItemView: UIView {
     private let dotView = UIView()
 
     private let itemSize: CGFloat
+    
     private let dotSize: CGFloat
 
     enum State {
@@ -230,7 +214,6 @@ private class ItemView: UIView {
         self.index = index
         
         let x = itemSize * CGFloat(index)
-        
         let frame = CGRect(x: x, y: 0, width: itemSize, height: itemSize)
 
         super.init(frame: frame)
