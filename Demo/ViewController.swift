@@ -10,36 +10,41 @@ import UIKit
 
 class ViewController: UIViewController, UIScrollViewDelegate {
     
-    let pageControl_scroll = FlexiblePageControl(
+    let scrollSize: CGFloat = 300
+    let numberOfPage = 10
+
+    let pageControl = FlexiblePageControl(
         pageCount: 10,
         dotSize: 6,
         dotSpace: 4
     )
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let numberOfPages = 10
-        
-        let scrollSize = 300
-        
         let scrollView = UIScrollView()
         scrollView.delegate = self
-        scrollView.backgroundColor = UIColor.lightGray
         scrollView.frame = CGRect(x: 0, y: 0, width: scrollSize, height: scrollSize)
         scrollView.center = view.center
-        scrollView.contentSize = CGSize(width: scrollSize*numberOfPages, height: scrollSize)
+        scrollView.contentSize = CGSize(width: scrollSize*CGFloat(numberOfPage), height: scrollSize)
         scrollView.isPagingEnabled = true
         
-        pageControl_scroll.center = CGPoint(x: scrollView.center.x, y: scrollView.frame.maxY + 16)
+        pageControl.center = CGPoint(x: scrollView.center.x, y: scrollView.frame.maxY + 16)
+        
+        for index in  0..<numberOfPage {
+            let view = UIImageView(frame: CGRect(x: CGFloat(index)*scrollSize, y: 0, width: scrollSize, height: scrollSize))
+            let imageNamed = NSString(format: "image%02d.jpg", index)
+            view.image = UIImage(named: imageNamed as String)
+            scrollView.addSubview(view)
+        }
         
         view.addSubview(scrollView)
-        view.addSubview(pageControl_scroll)
+        view.addSubview(pageControl)
         
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        pageControl_scroll.selectedPage = Int(scrollView.contentOffset.x/300)
+        pageControl.selectedPage = Int(scrollView.contentOffset.x/scrollSize)
     }
     
 }
