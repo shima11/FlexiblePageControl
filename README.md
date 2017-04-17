@@ -10,17 +10,25 @@ A flexible PageControl like Instagram.
 
 # Install
 
+### Carthage
 For Installing with Carthage, add it to your Cartfile.
 
 ````
 github "shima11/FlexiblePageControl"
 ````
-
-terminal
-
 ````
-carthage update
+$ carthage update
 ````
+
+### CocoaPods
+
+For installing with CocoaPods, add it to your Podfile.
+```
+pod "FlexiblePageControl", :git => "https://github.com/shima11/FlexiblePageControl.git"
+```
+```
+$ pod update
+```
 
 # Usage
 
@@ -39,8 +47,8 @@ update page
 
 ````
 func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        pageControl.setProgress(contentOffsetX: scrollView.contentOffset.x, pageWidth: scrollView.bounds.width)
-    }
+    pageControl.setProgress(contentOffsetX: scrollView.contentOffset.x, pageWidth: scrollView.bounds.width)
+}
 ````
 
 # Licence
