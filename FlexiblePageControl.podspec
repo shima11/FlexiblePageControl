@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "FlexiblePageControl"
-  s.version      = "0.0.1"
+  s.version      = "1.0.1"
   s.summary      = "FlexiblePageControl is flexible PageControl."
 
   # This description is used to generate tags and improve search results.
@@ -84,7 +84,7 @@ This Framework is flexible PageControl like Instagram.
   #
 
   # s.source       = { :git => "http://EXAMPLE/FlexiblePageControl.git", :tag => "#{s.version}" }
-s.source = { :git => "https://github.com/shima11/FlexiblePageControl.git", :tag => "v#{s.version}"}
+s.source = { :git => "https://github.com/shima11/FlexiblePageControl.git", :tag => "#{s.version}"}
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
