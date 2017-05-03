@@ -11,14 +11,10 @@ import UIKit
 class ViewController: UIViewController, UIScrollViewDelegate {
     
     let scrollSize: CGFloat = 300
-    let numberOfPage = 10
+    let numberOfPage: Int = 10
 
-    let pageControl = FlexiblePageControl(
-        pageCount: 10,
-        dotSize: 6,
-        dotSpace: 4
-    )
-    
+    let pageControl = FlexiblePageControl()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,13 +22,14 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         scrollView.delegate = self
         scrollView.frame = CGRect(x: 0, y: 0, width: scrollSize, height: scrollSize)
         scrollView.center = view.center
-        scrollView.contentSize = CGSize(width: scrollSize*CGFloat(numberOfPage), height: scrollSize)
+        scrollView.contentSize = CGSize(width: scrollSize * CGFloat(numberOfPage), height: scrollSize)
         scrollView.isPagingEnabled = true
         
         pageControl.center = CGPoint(x: scrollView.center.x, y: scrollView.frame.maxY + 16)
-        
+        pageControl.numberOfPages = numberOfPage
+
         for index in  0..<numberOfPage {
-            let view = UIImageView(frame: CGRect(x: CGFloat(index)*scrollSize, y: 0, width: scrollSize, height: scrollSize))
+            let view = UIImageView(frame: CGRect(x: CGFloat(index) * scrollSize, y: 0, width: scrollSize, height: scrollSize))
             let imageNamed = NSString(format: "image%02d.jpg", index)
             view.image = UIImage(named: imageNamed as String)
             scrollView.addSubview(view)
@@ -40,10 +37,10 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         
         view.addSubview(scrollView)
         view.addSubview(pageControl)
-        
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+
         pageControl.setProgress(contentOffsetX: scrollView.contentOffset.x, pageWidth: scrollView.bounds.width)
     }
     
