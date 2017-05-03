@@ -42,7 +42,7 @@ view.addSubview(pageControl)
 pageControl.updateViewSize()
 ````
 
-Customize
+### Customize
 ````
 pageControl.dotSize = 8
 pageControl.dotSpace = 5
@@ -53,7 +53,7 @@ pageControl.pageIndicatorTintColor = UIColor.gray
 pageControl.currentPageIndicatorTintColor = UIColor.blue
 ````
 
-Update page
+### Update page
 
 ````
 func scrollViewDidScroll(_ scrollView: UIScrollView) {
