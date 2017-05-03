@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class FlexiblePageControl: UIView, UIScrollViewDelegate {
+public class FlexiblePageControl: UIView {
 
     // MARK: public
 
@@ -16,18 +16,23 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
 
     public var currentPageIndicatorTintColor: UIColor = UIColor(red:0.32, green:0.59, blue:0.91, alpha:1.00)
 
-    public var isAnimation: Bool = true
+    public var animateDuration: TimeInterval = 0.3
 
-    static var animateDuration: TimeInterval = 0.3
+    public var hidesForSinglePage: Bool = false {
+        didSet {
+            scrollView.isHidden = (numberOfPages <= 1 && hidesForSinglePage) ? true : false
+        }
+    }
 
     public var currentPage: Int = 0 {
         didSet {
-            setCurrentPage(currentPage: currentPage, animated: isAnimation)
+            setCurrentPage(currentPage: currentPage, animated: true)
         }
     }
 
     public var numberOfPages: Int = 0 {
         didSet {
+            scrollView.isHidden = (numberOfPages <= 1 && hidesForSinglePage) ? true : false
             displayCount = min(displayCount, numberOfPages)
         }
     }
@@ -53,18 +58,12 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
         }
     }
 
-    public func setProgress(contentOffsetX: CGFloat, pageWidth: CGFloat) {
-
-        let currentPage = Int(round(contentOffsetX/pageWidth))
-        if currentPage == self.currentPage { return }
-        self.currentPage = currentPage
-    }
-
     public init() {
 
         super.init(frame: .zero)
 
         setup()
+        updateViewSize()
     }
 
     public override init(frame: CGRect) {
@@ -87,7 +86,19 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
 
     public override var intrinsicContentSize: CGSize {
 
-        return CGSize(width: itemSize*CGFloat(displayCount), height: itemSize)
+        return CGSize(width: itemSize * CGFloat(displayCount), height: itemSize)
+    }
+
+    public func setProgress(contentOffsetX: CGFloat, pageWidth: CGFloat) {
+
+        let currentPage = Int(round(contentOffsetX/pageWidth))
+        if currentPage == self.currentPage { return }
+        self.currentPage = currentPage
+    }
+
+    public func updateViewSize() {
+
+        self.bounds.size = intrinsicContentSize
     }
 
     // MARK: private
@@ -108,7 +119,6 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
         backgroundColor = UIColor.clear
 
         scrollView.backgroundColor = UIColor.clear
-        scrollView.delegate = self
         scrollView.isUserInteractionEnabled = false
         scrollView.showsHorizontalScrollIndicator = false
 
@@ -124,7 +134,7 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
         }
         self.items = items
 
-        scrollView.contentSize = CGSize(width: itemSize*CGFloat(numberOfPages), height: itemSize)
+        scrollView.contentSize = CGSize(width: itemSize * CGFloat(numberOfPages), height: itemSize)
 
         let views = scrollView.subviews
         for view in views {
@@ -134,13 +144,13 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
             scrollView.addSubview(items[i])
         }
 
-        let size = CGSize(width: itemSize*CGFloat(displayCount), height: itemSize)
+        let size = CGSize(width: itemSize * CGFloat(displayCount), height: itemSize)
         let frame = CGRect(origin: .zero, size: size)
 
         scrollView.frame = frame
 
         if displayCount < numberOfPages {
-            scrollView.contentInset = UIEdgeInsets(top: 0, left: itemSize*2, bottom: 0, right: itemSize*2)
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: itemSize * 2, bottom: 0, right: itemSize * 2)
         } else {
             scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         }
@@ -154,7 +164,7 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
         
         if canScroll {
             updateDotPosition(currentPage: currentPage, animated: animated)
-            updateDotSize(currentPage: currentPage)
+            updateDotSize(currentPage: currentPage, animated: animated)
         }
     }
     
@@ -167,7 +177,7 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
     
     private func updateDotPosition(currentPage: Int, animated: Bool) {
 
-        let duration = animated ? FlexiblePageControl.animateDuration : 0
+        let duration = animated ? animateDuration : 0
         
         if currentPage == 0 {
             let x = -scrollView.contentInset.left
@@ -195,11 +205,15 @@ public class FlexiblePageControl: UIView, UIScrollViewDelegate {
         }
     }
     
-    private func updateDotSize(currentPage: Int) {
-        
+    private func updateDotSize(currentPage: Int, animated: Bool) {
+
+        let duration = animated ? animateDuration : 0
+
         for index in 0..<numberOfPages {
             
             let item = items[index]
+
+            item.animateDuration = duration
             
             if index == currentPage {
                 item.state = .Normal
@@ -250,6 +264,8 @@ private class ItemView: UIView {
         }
     }
 
+    var animateDuration: TimeInterval = 0.0
+
     init(itemSize: CGFloat, dotSize: CGFloat, index: Int) {
         
         self.itemSize = itemSize
@@ -293,12 +309,12 @@ private class ItemView: UIView {
         case .Normal:
             _size = CGSize(width: dotSize, height: dotSize)
         case .Medium:
-            _size = CGSize(width: dotSize*0.7, height: dotSize*0.7)
+            _size = CGSize(width: dotSize * 0.7, height: dotSize * 0.7)
         case .Small:
-            _size = CGSize(width: dotSize*0.5, height: dotSize*0.5)
+            _size = CGSize(width: dotSize * 0.5, height: dotSize * 0.5)
         }
         
-        UIView.animate(withDuration:FlexiblePageControl.animateDuration, animations: { [unowned self] in
+        UIView.animate(withDuration: animateDuration, animations: { [unowned self] in
             self.dotView.frame = CGRect(origin: CGPoint.zero, size: _size)
             self.dotView.center = CGPoint(x: self.bounds.width/2, y: self.bounds.height/2)
         })
