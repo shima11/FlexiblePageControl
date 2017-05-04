@@ -195,43 +195,38 @@ public class FlexiblePageControl: UIView {
 
         if currentPage == 0 {
             let x = -scrollView.contentInset.left
-            let direction = behaviorDirection(x: x)
-            reusedView(direction: direction)
-            UIView.animate(withDuration: duration, animations: { [unowned self] in
-                self.scrollView.contentOffset.x = x
-            })
+            moveScrollViewView(x: x, duration: duration)
         }
         else if currentPage == numberOfPages - 1 {
             let x = scrollView.contentSize.width - scrollView.bounds.width + scrollView.contentInset.right
-            let direction = behaviorDirection(x: x)
-            reusedView(direction: direction)
-            UIView.animate(withDuration: duration, animations: { [unowned self] in
-                self.scrollView.contentOffset.x = x
-            })
+            moveScrollViewView(x: x, duration: duration)
         }
         else if CGFloat(currentPage) * itemSize <= scrollView.contentOffset.x + itemSize {
             let x = scrollView.contentOffset.x - itemSize
-            let direction = behaviorDirection(x: x)
-            reusedView(direction: direction)
-            UIView.animate(withDuration: duration, animations: { [unowned self] in
-                self.scrollView.contentOffset.x = x
-            })
+            moveScrollViewView(x: x, duration: duration)
         }
         else if CGFloat(currentPage) * itemSize + itemSize >= scrollView.contentOffset.x + scrollView.bounds.width - itemSize {
             let x = scrollView.contentOffset.x + itemSize
-            let direction = behaviorDirection(x: x)
-            reusedView(direction: direction)
-            UIView.animate(withDuration: duration, animations: { [unowned self] in
-                self.scrollView.contentOffset.x = x
-            })
+            moveScrollViewView(x: x, duration: duration)
         }
     }
 
+    private func moveScrollViewView(x: CGFloat, duration: TimeInterval) {
+
+        let direction = behaviorDirection(x: x)
+        reusedView(direction: direction)
+        UIView.animate(withDuration: duration, animations: { [unowned self] in
+            self.scrollView.contentOffset.x = x
+        })
+    }
+
     private enum Direction {
+
         case left, right, stay
     }
 
     private func behaviorDirection(x:CGFloat) -> Direction {
+
         if x > scrollView.contentOffset.x {
             return .right
         }
@@ -254,14 +249,14 @@ public class FlexiblePageControl: UIView {
             lastItem.index = firstItem.index - 1
             lastItem.frame = CGRect(x: CGFloat(lastItem.index) * itemSize, y: 0, width: itemSize, height: itemSize)
             items.insert(lastItem, at: 0)
-            items.remove(at: items.count - 1)
+            items.removeLast()
 
         case .right:
 
             firstItem.index = lastItem.index + 1
             firstItem.frame = CGRect(x: CGFloat(firstItem.index) * itemSize, y: 0, width: itemSize, height: itemSize)
             items.insert(firstItem, at: items.count)
-            items.remove(at: 0)
+            items.removeFirst()
 
         case .stay:
 
