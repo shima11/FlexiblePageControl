@@ -134,6 +134,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #if defined(__has_feature) && __has_feature(modules)
 @import UIKit;
 @import CoreGraphics;
+@import Foundation;
 #endif
 
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
@@ -142,16 +143,25 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 @class NSCoder;
 
 SWIFT_CLASS("_TtC19FlexiblePageControl19FlexiblePageControl")
-@interface FlexiblePageControl : UIView <UIScrollViewDelegate>
-@property (nonatomic, strong) UIColor * _Nonnull selectedColor;
-@property (nonatomic, strong) UIColor * _Nonnull unSelectedColor;
-@property (nonatomic) NSInteger boundaryValue;
-@property (nonatomic, readonly) CGSize intrinsicContentSize;
-- (nonnull instancetype)initWithPageCount:(NSInteger)pageCount dotSize:(CGFloat)dotSize dotSpace:(CGFloat)dotSpace OBJC_DESIGNATED_INITIALIZER;
+@interface FlexiblePageControl : UIView
+@property (nonatomic, strong) UIColor * _Nonnull pageIndicatorTintColor;
+@property (nonatomic, strong) UIColor * _Nonnull currentPageIndicatorTintColor;
+@property (nonatomic) NSInteger currentPage;
+@property (nonatomic) NSInteger numberOfPages;
+@property (nonatomic) NSInteger displayCount;
+@property (nonatomic) CGFloat dotSize;
+@property (nonatomic) CGFloat dotSpace;
+@property (nonatomic) CGFloat smallDotSizeRatio;
+@property (nonatomic) CGFloat mediumDotSizeRatio;
+@property (nonatomic) NSTimeInterval animateDuration;
+@property (nonatomic) BOOL hidesForSinglePage;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithFrame:(CGRect)frame OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 - (void)layoutSubviews;
+@property (nonatomic, readonly) CGSize intrinsicContentSize;
 - (void)setProgressWithContentOffsetX:(CGFloat)contentOffsetX pageWidth:(CGFloat)pageWidth;
-- (nonnull instancetype)initWithFrame:(CGRect)frame SWIFT_UNAVAILABLE;
+- (void)updateViewSize;
 @end
 
 #pragma clang diagnostic pop
