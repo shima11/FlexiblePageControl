@@ -12,9 +12,17 @@ public class FlexiblePageControl: UIView {
 
     // MARK: public
 
-    public var pageIndicatorTintColor: UIColor = UIColor(red:0.86, green:0.86, blue:0.86, alpha:1.00)
+    public var pageIndicatorTintColor: UIColor = UIColor(red:0.86, green:0.86, blue:0.86, alpha:1.00) {
+        didSet {
+            updateDotColor(currentPage: currentPage)
+        }
+    }
 
-    public var currentPageIndicatorTintColor: UIColor = UIColor(red:0.32, green:0.59, blue:0.91, alpha:1.00)
+    public var currentPageIndicatorTintColor: UIColor = UIColor(red:0.32, green:0.59, blue:0.91, alpha:1.00) {
+        didSet {
+            updateDotColor(currentPage: currentPage)
+        }
+    }
 
     public var currentPage: Int = 0 {
         didSet {
