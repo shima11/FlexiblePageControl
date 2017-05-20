@@ -33,7 +33,7 @@ public class FlexiblePageControl: UIView {
 
     public var numberOfPages: Int = 0 {
         didSet {
-            scrollView.isHidden = (numberOfPages <= 1 && hidesForSinglePage) ? true : false
+            scrollView.isHidden = (numberOfPages <= 1 && hidesForSinglePage)
             displayCount = min(displayCount, numberOfPages)
         }
     }
@@ -42,7 +42,7 @@ public class FlexiblePageControl: UIView {
 
     public var displayCount: Int = 7 {
         didSet {
-            canScroll = (numberOfPages > displayCount) ? true : false
+            canScroll = (numberOfPages > displayCount)
             update()
         }
     }
@@ -75,7 +75,7 @@ public class FlexiblePageControl: UIView {
 
     public var hidesForSinglePage: Bool = false {
         didSet {
-            scrollView.isHidden = (numberOfPages <= 1 && hidesForSinglePage) ? true : false
+            scrollView.isHidden = (numberOfPages <= 1 && hidesForSinglePage)
         }
     }
 
@@ -149,7 +149,7 @@ public class FlexiblePageControl: UIView {
     private func update() {
 
         var items:[ItemView] = []
-        for index in -1..<(displayCount+1) {
+        for index in -2..<(displayCount+2) {
             let item = ItemView(itemSize: itemSize, dotSize: dotSize, index: index)
             items.append(item)
         }
@@ -191,7 +191,7 @@ public class FlexiblePageControl: UIView {
     
     private func updateDotColor(currentPage: Int) {
      
-        for index in 0..<(displayCount + 2) {
+        for index in 0..<(displayCount + 4) {
             let pageIndex = items[index].index
             items[index].dotColor = (pageIndex == currentPage) ? currentPageIndicatorTintColor : pageIndicatorTintColor
         }
@@ -276,7 +276,7 @@ public class FlexiblePageControl: UIView {
 
         let duration = animated ? animateDuration : 0
 
-        for index in 0..<(displayCount + 2) {
+        for index in 0..<(displayCount + 4) {
 
             let item = items[index]
 
@@ -290,7 +290,7 @@ public class FlexiblePageControl: UIView {
                 item.state = .None
             }
             // outside of right
-            else if item.index > numberOfPages-1 {
+            else if item.index > numberOfPages - 1 {
                 item.state = .None
             }
             // first dot from left
