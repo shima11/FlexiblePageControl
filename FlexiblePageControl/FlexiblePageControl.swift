@@ -395,7 +395,9 @@ private class ItemView: UIView {
         case .None:
             _size = CGSize.zero
         }
-        
+
+        dotView.layer.cornerRadius = _size.height / 2.0
+
         UIView.animate(withDuration: animateDuration, animations: { [unowned self] in
             self.dotView.layer.bounds.size = _size
         })
