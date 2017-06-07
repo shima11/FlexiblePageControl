@@ -13,7 +13,9 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     let scrollSize: CGFloat = 300
     let numberOfPage: Int = 10
 
-    let pageControl = FlexiblePageControl()
+    let pageControl1 = FlexiblePageControl()
+
+    @IBOutlet weak var pageControl2: FlexiblePageControl!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,8 +27,10 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: scrollSize * CGFloat(numberOfPage), height: scrollSize)
         scrollView.isPagingEnabled = true
         
-        pageControl.center = CGPoint(x: scrollView.center.x, y: scrollView.frame.maxY + 16)
-        pageControl.numberOfPages = numberOfPage
+        pageControl1.center = CGPoint(x: scrollView.center.x, y: scrollView.frame.maxY + 16)
+        pageControl1.numberOfPages = numberOfPage
+
+        pageControl2.numberOfPages = numberOfPage
 
         for index in  0..<numberOfPage {
             let view = UIImageView(frame: CGRect(x: CGFloat(index) * scrollSize, y: 0, width: scrollSize, height: scrollSize))
@@ -34,14 +38,14 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             view.image = UIImage(named: imageNamed as String)
             scrollView.addSubview(view)
         }
-        
+
         view.addSubview(scrollView)
-        view.addSubview(pageControl)
+        view.addSubview(pageControl1)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
 
-        pageControl.setProgress(contentOffsetX: scrollView.contentOffset.x, pageWidth: scrollView.bounds.width)
+        pageControl1.setProgress(contentOffsetX: scrollView.contentOffset.x, pageWidth: scrollView.bounds.width)
+        pageControl2.setProgress(contentOffsetX: scrollView.contentOffset.x, pageWidth: scrollView.bounds.width)
     }
-    
 }

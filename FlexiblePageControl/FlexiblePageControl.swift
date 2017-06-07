@@ -95,7 +95,11 @@ public class FlexiblePageControl: UIView {
     }
 
     required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+
+        super.init(coder: aDecoder)
+
+        setup()
+        updateViewSize()
     }
 
     public override func layoutSubviews() {

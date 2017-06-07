@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BMs-uN-Yms">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="Wlw-XC-7VO">
+            <objects>
+                <viewController id="BMs-uN-Yms" customClass="ViewController" customModule="Demo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="CpM-mg-e36"/>
+                        <viewControllerLayoutGuide type="bottom" id="DOo-fa-Lgh"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="F12-d6-zuk">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pCv-gD-7Lt" customClass="FlexiblePageControl" customModule="Demo" customModuleProvider="target">
+                                <rect key="frame" x="167.5" y="599" width="40" height="20"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="h5I-7U-I7j"/>
+                                    <constraint firstAttribute="width" constant="40" id="sbU-l9-mcn"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="DOo-fa-Lgh" firstAttribute="top" secondItem="pCv-gD-7Lt" secondAttribute="bottom" constant="48" id="WoJ-Cx-AjQ"/>
+                            <constraint firstItem="pCv-gD-7Lt" firstAttribute="centerX" secondItem="F12-d6-zuk" secondAttribute="centerX" id="iyL-aM-Ije"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="pageControl2" destination="pCv-gD-7Lt" id="Dqd-SR-fET"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="D6s-Cc-lwB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="285.60000000000002" y="311.69415292353824"/>
+        </scene>
+    </scenes>
+</document>

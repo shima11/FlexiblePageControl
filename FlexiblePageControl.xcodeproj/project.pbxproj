@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D42F44971EE7C8FF0097C199 /* ViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D42F44961EE7C8FF0097C199 /* ViewController.storyboard */; };
 		D44B61A01E98B7AE00D38950 /* image01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D44B61961E98B7AE00D38950 /* image01.jpg */; };
 		D44B61A11E98B7AE00D38950 /* image02.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D44B61971E98B7AE00D38950 /* image02.jpg */; };
 		D44B61A21E98B7AE00D38950 /* image03.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D44B61981E98B7AE00D38950 /* image03.jpg */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D42F44961EE7C8FF0097C199 /* ViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ViewController.storyboard; sourceTree = "<group>"; };
 		D44B61961E98B7AE00D38950 /* image01.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = image01.jpg; path = resouce/image01.jpg; sourceTree = "<group>"; };
 		D44B61971E98B7AE00D38950 /* image02.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = image02.jpg; path = resouce/image02.jpg; sourceTree = "<group>"; };
 		D44B61981E98B7AE00D38950 /* image03.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = image03.jpg; path = resouce/image03.jpg; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 			children = (
 				D4DC6C4C1E92B9310022F452 /* AppDelegate.swift */,
 				D4DC6C4E1E92B9310022F452 /* ViewController.swift */,
+				D42F44961EE7C8FF0097C199 /* ViewController.storyboard */,
 				D4DC6C531E92B9310022F452 /* Assets.xcassets */,
 				D4DC6C551E92B9310022F452 /* LaunchScreen.storyboard */,
 				D4DC6C581E92B9310022F452 /* Info.plist */,
@@ -231,6 +234,7 @@
 				D4DC6C541E92B9310022F452 /* Assets.xcassets in Resources */,
 				D44B61A21E98B7AE00D38950 /* image03.jpg in Resources */,
 				D44B61A51E98B7AE00D38950 /* image06.jpg in Resources */,
+				D42F44971EE7C8FF0097C199 /* ViewController.storyboard in Resources */,
 				D44B61A01E98B7AE00D38950 /* image01.jpg in Resources */,
 				D44B61AB1E98B9C300D38950 /* image00.jpg in Resources */,
 				D44B61A61E98B7AE00D38950 /* image07.jpg in Resources */,
