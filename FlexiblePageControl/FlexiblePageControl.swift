@@ -120,6 +120,12 @@ public class FlexiblePageControl: UIView {
         if currentPage == self.currentPage { return }
         self.currentPage = currentPage
     }
+    
+    public func setProgress(currentPage: Int) {
+
+        if currentPage == self.currentPage { return }
+        self.currentPage = currentPage
+    }
 
     public func updateViewSize() {
 
