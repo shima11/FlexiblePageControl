@@ -153,11 +153,23 @@ public class FlexiblePageControl: UIView {
     private func update() {
 
         var items:[ItemView] = []
-        for index in -2..<(displayCount+2) {
-            let item = ItemView(itemSize: itemSize, dotSize: dotSize, index: index)
-            items.append(item)
+        
+        if currentPage < displayCount {
+            for index in -2..<(displayCount+2) {
+                let item = ItemView(itemSize: itemSize, dotSize: dotSize, index: index)
+                items.append(item)
+            }
+            self.items = items
+        } else {
+            guard let firstItem = self.items.first else { return }
+            guard let lastItem = self.items.last else { return }
+            
+            for index in firstItem.index...lastItem.index {
+                let item = ItemView(itemSize: itemSize, dotSize: dotSize, index: index)
+                items.append(item)
+            }
+            self.items = items
         }
-        self.items = items
 
         scrollView.contentSize = CGSize(width: itemSize * CGFloat(numberOfPages), height: itemSize)
 
