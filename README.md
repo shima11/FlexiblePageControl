@@ -15,7 +15,7 @@ A flexible UIPageControl like Instagram.
 For Installing with Carthage, add it to your Cartfile.
 
 ````
-github "shima11/FlexiblePageControl"
+github "FedeGens/FlexiblePageControl"
 ````
 ````
 $ carthage update
