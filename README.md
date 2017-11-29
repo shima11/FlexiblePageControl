@@ -25,7 +25,7 @@ $ carthage update
 
 For installing with CocoaPods, add it to your Podfile.
 ```
-pod "FlexiblePageControl", :git => "https://github.com/shima11/FlexiblePageControl.git"
+pod "FlexiblePageControl", :git => "https://github.com/FedeGens/FlexiblePageControl.git"
 ```
 ```
 $ pod update
