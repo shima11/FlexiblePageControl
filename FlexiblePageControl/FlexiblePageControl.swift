@@ -243,14 +243,13 @@ public class FlexiblePageControl: UIView {
     }
 
     private func behaviorDirection(x:CGFloat) -> Direction {
-
-        if x > scrollView.contentOffset.x {
+        
+        switch x {
+        case let x where x > scrollView.contentOffset.x:
             return .right
-        }
-        else if x < scrollView.contentOffset.x {
+        case let x where x < scrollView.contentOffset.x:
             return .left
-        }
-        else {
+        default:
             return .stay
         }
     }
