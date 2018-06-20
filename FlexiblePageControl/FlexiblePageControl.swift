@@ -26,8 +26,10 @@ public class FlexiblePageControl: UIView {
 
     public var currentPage: Int = 0 {
         didSet {
+            guard currentPage != previousCurrentPage else { return }
             scrollView.layer.removeAllAnimations()
             setCurrentPage(currentPage: currentPage, animated: true)
+            previousCurrentPage = currentPage
         }
     }
 
@@ -139,6 +141,9 @@ public class FlexiblePageControl: UIView {
     
     private var items:[ItemView] = [ItemView]()
 
+    
+    private var previousCurrentPage: Int = 0
+    
     private func setup() {
 
         backgroundColor = UIColor.clear
@@ -238,14 +243,13 @@ public class FlexiblePageControl: UIView {
     }
 
     private func behaviorDirection(x:CGFloat) -> Direction {
-
-        if x > scrollView.contentOffset.x {
+        
+        switch x {
+        case let x where x > scrollView.contentOffset.x:
             return .right
-        }
-        else if x < scrollView.contentOffset.x {
+        case let x where x < scrollView.contentOffset.x:
             return .left
-        }
-        else {
+        default:
             return .stay
         }
     }
