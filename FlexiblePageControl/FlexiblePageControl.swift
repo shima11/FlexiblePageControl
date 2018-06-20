@@ -25,53 +25,46 @@ public class FlexiblePageControl: UIView {
     }
 
     public var currentPage: Int = 0 {
+        willSet {
+            guard newValue < numberOfPages, newValue >= 0 else { return }
+        }
         didSet {
             guard currentPage != previousCurrentPage else { return }
             scrollView.layer.removeAllAnimations()
             setCurrentPage(currentPage: currentPage, animated: true)
             previousCurrentPage = currentPage
+
         }
     }
+    private var previousCurrentPage: Int = 0
 
+    
     public var numberOfPages: Int = 0 {
         didSet {
             scrollView.isHidden = (numberOfPages <= 1 && hidesForSinglePage)
-            displayCount = min(displayCount, numberOfPages)
-        }
-    }
-
-    // Recommended displayCount is 5 or more.
-
-    public var displayCount: Int = 7 {
-        didSet {
-            canScroll = (numberOfPages > displayCount)
+            config.displayCount = min(config.displayCount, numberOfPages)
             update()
         }
     }
 
-    public var dotSize: CGFloat = 6 {
-        didSet {
-            update()
-        }
+    public struct Config {
+
+        public var displayCount: Int
+        public var dotSize: CGFloat
+        public var dotSpace: CGFloat
+        public var smallDotSizeRatio: CGFloat
+        public var mediumDotSizeRatio: CGFloat
     }
 
-    public var dotSpace: CGFloat = 4 {
-        didSet {
-            update()
-        }
-    }
+    // default config
 
-    public var smallDotSizeRatio: CGFloat = 0.5 {
-        didSet {
-            ItemView.smallSizeRatio = smallDotSizeRatio
-        }
-    }
-
-    public var mediumDotSizeRatio: CGFloat = 0.7 {
-        didSet {
-            ItemView.mediumSizeRatio = mediumDotSizeRatio
-        }
-    }
+    private var config = Config(
+        displayCount: 7,
+        dotSize: 6,
+        dotSpace: 4,
+        smallDotSizeRatio: 0.5,
+        mediumDotSizeRatio: 0.7
+    )
 
     public var animateDuration: TimeInterval = 0.3
 
@@ -79,6 +72,13 @@ public class FlexiblePageControl: UIView {
         didSet {
             scrollView.isHidden = (numberOfPages <= 1 && hidesForSinglePage)
         }
+    }
+
+    public func setConfig(config: Config) {
+
+        self.config = config
+
+        update()
     }
 
     public init() {
@@ -113,18 +113,12 @@ public class FlexiblePageControl: UIView {
 
     public override var intrinsicContentSize: CGSize {
 
-        return CGSize(width: itemSize * CGFloat(displayCount), height: itemSize)
+        return CGSize(width: itemSize * CGFloat(config.displayCount), height: itemSize)
     }
 
     public func setProgress(contentOffsetX: CGFloat, pageWidth: CGFloat) {
 
         let currentPage = Int(round(contentOffsetX/pageWidth))
-        if currentPage == self.currentPage { return }
-        self.currentPage = currentPage
-    }
-    
-    public func setProgress(currentPage: Int) {
-
         if currentPage == self.currentPage { return }
         self.currentPage = currentPage
     }
@@ -138,18 +132,13 @@ public class FlexiblePageControl: UIView {
 
     private let scrollView: UIScrollView = UIScrollView()
 
-    private var canScroll: Bool = false
-
     private var itemSize: CGFloat {
 
-        return dotSize + dotSpace
+        return config.dotSize + config.dotSpace
     }
     
-    private var items:[ItemView] = [ItemView]()
+    private var items: [ItemView] = []
 
-    
-    private var previousCurrentPage: Int = 0
-    
     private func setup() {
 
         backgroundColor = UIColor.clear
@@ -163,23 +152,16 @@ public class FlexiblePageControl: UIView {
 
     private func update() {
 
-        var items:[ItemView] = []
-        
-        if currentPage < displayCount {
-            for index in -2..<(displayCount+2) {
-                let item = ItemView(itemSize: itemSize, dotSize: dotSize, index: index)
-                items.append(item)
-            }
-            self.items = items
+        if currentPage < config.displayCount {
+
+            items = (-2..<(config.displayCount+2))
+                .map { ItemView(itemSize: itemSize, dotSize: config.dotSize, index: $0) }
         } else {
-            guard let firstItem = self.items.first else { return }
-            guard let lastItem = self.items.last else { return }
-            
-            for index in firstItem.index...lastItem.index {
-                let item = ItemView(itemSize: itemSize, dotSize: dotSize, index: index)
-                items.append(item)
-            }
-            self.items = items
+
+            guard let firstItem = items.first else { return }
+            guard let lastItem = items.last else { return }
+            items = (firstItem.index...lastItem.index)
+                .map { ItemView(itemSize: itemSize, dotSize: config.dotSize, index: $0) }
         }
 
         scrollView.contentSize = CGSize(width: itemSize * CGFloat(numberOfPages), height: itemSize)
@@ -192,12 +174,12 @@ public class FlexiblePageControl: UIView {
             scrollView.addSubview(items[i])
         }
 
-        let size = CGSize(width: itemSize * CGFloat(displayCount), height: itemSize)
+        let size = CGSize(width: itemSize * CGFloat(config.displayCount), height: itemSize)
         let frame = CGRect(origin: .zero, size: size)
 
         scrollView.frame = frame
 
-        if displayCount < numberOfPages {
+        if config.displayCount < numberOfPages {
             scrollView.contentInset = UIEdgeInsets(top: 0, left: itemSize * 2, bottom: 0, right: itemSize * 2)
         } else {
             scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -209,18 +191,18 @@ public class FlexiblePageControl: UIView {
     private func setCurrentPage(currentPage: Int, animated: Bool) {
 
         updateDotColor(currentPage: currentPage)
-        
-        if canScroll {
+
+        if numberOfPages > config.displayCount {
             updateDotPosition(currentPage: currentPage, animated: animated)
             updateDotSize(currentPage: currentPage, animated: animated)
         }
     }
     
     private func updateDotColor(currentPage: Int) {
-     
-        for index in 0..<(displayCount + 4) {
-            let pageIndex = items[index].index
-            items[index].dotColor = (pageIndex == currentPage) ? currentPageIndicatorTintColor : pageIndicatorTintColor
+
+        items.forEach {
+            $0.dotColor = ($0.index == currentPage) ?
+                currentPageIndicatorTintColor : pageIndicatorTintColor
         }
     }
     
@@ -243,6 +225,45 @@ public class FlexiblePageControl: UIView {
         else if CGFloat(currentPage) * itemSize + itemSize >= scrollView.contentOffset.x + scrollView.bounds.width - itemSize {
             let x = scrollView.contentOffset.x + itemSize
             moveScrollViewView(x: x, duration: duration)
+        }
+    }
+
+    private func updateDotSize(currentPage: Int, animated: Bool) {
+
+        let duration = animated ? animateDuration : 0
+
+        items.forEach { item in
+            item.animateDuration = duration
+            if item.index == currentPage {
+                item.state = .Normal
+            }
+            // outside of left
+            else if item.index < 0 {
+                item.state = .None
+            }
+            // outside of right
+            else if item.index > numberOfPages - 1 {
+                item.state = .None
+            }
+            // first dot from left
+            else if item.frame.minX <= scrollView.contentOffset.x {
+                item.state = .Small
+            }
+            // first dot from right
+            else if item.frame.maxX >= scrollView.contentOffset.x + scrollView.bounds.width {
+                item.state = .Small
+            }
+            // second dot from left
+            else if item.frame.minX <= scrollView.contentOffset.x + itemSize {
+                item.state = .Medium
+            }
+            // second dot from right
+            else if item.frame.maxX >= scrollView.contentOffset.x + scrollView.bounds.width - itemSize {
+                item.state = .Medium
+            }
+            else {
+                item.state = .Normal
+            }
         }
     }
 
@@ -295,49 +316,6 @@ public class FlexiblePageControl: UIView {
         case .stay:
 
             break
-        }
-    }
-
-    private func updateDotSize(currentPage: Int, animated: Bool) {
-
-        let duration = animated ? animateDuration : 0
-
-        for index in 0..<(displayCount + 4) {
-
-            let item = items[index]
-
-            item.animateDuration = duration
-
-            if item.index == currentPage {
-                item.state = .Normal
-            }
-            // outside of left
-            else if item.index < 0 {
-                item.state = .None
-            }
-            // outside of right
-            else if item.index > numberOfPages - 1 {
-                item.state = .None
-            }
-            // first dot from left
-            else if item.frame.minX <= scrollView.contentOffset.x {
-                item.state = .Small
-            }
-            // first dot from right
-            else if item.frame.maxX >= scrollView.contentOffset.x + scrollView.bounds.width {
-                item.state = .Small
-            }
-            // second dot from left
-            else if item.frame.minX <= scrollView.contentOffset.x + itemSize {
-                item.state = .Medium
-            }
-            // second dot from right
-            else if item.frame.maxX >= scrollView.contentOffset.x + scrollView.bounds.width - itemSize {
-                item.state = .Medium
-            }
-            else {
-                item.state = .Normal
-            }
         }
     }
 }
@@ -417,7 +395,10 @@ private class ItemView: UIView {
         case .Medium:
             _size = CGSize(width: dotSize * ItemView.mediumSizeRatio, height: dotSize * ItemView.mediumSizeRatio)
         case .Small:
-            _size = CGSize(width: dotSize * ItemView.smallSizeRatio, height: dotSize * ItemView.smallSizeRatio)
+            _size = CGSize(
+                width: dotSize * ItemView.smallSizeRatio,
+                height: dotSize * ItemView.smallSizeRatio
+            )
         case .None:
             _size = CGSize.zero
         }
