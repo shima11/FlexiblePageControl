@@ -71,7 +71,7 @@ public class FlexiblePageControl: UIView {
         }
     }
 
-    public func setConfig(config: Config) {
+    public func setConfig(_ config: Config) {
 
         self.config = config
 
