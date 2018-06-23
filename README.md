@@ -12,7 +12,8 @@ A flexible UIPageControl like Instagram.
 # Install
 
 ### Carthage
-For Installing with Carthage, add it to your Cartfile.
+
+For Installing with Carthage, add it to your `Cartfile`.
 
 ````
 github "shima11/FlexiblePageControl"
@@ -23,9 +24,9 @@ $ carthage update
 
 ### CocoaPods
 
-For installing with CocoaPods, add it to your Podfile.
+For installing with CocoaPods, add it to your `Podfile`.
 ```
-pod "FlexiblePageControl", :git => "https://github.com/shima11/FlexiblePageControl.git"
+pod "FlexiblePageControl"
 ```
 ```
 $ pod update
@@ -37,20 +38,24 @@ $ pod update
 let pageControl = FlexiblePageControl()
 pageControl.numberOfPages = 10
 view.addSubview(pageControl)
-
-// Updated to the minimum size according to the displayCount
-pageControl.updateViewSize()
 ````
 
 ### Customize
+
 ````
-pageControl.dotSize = 8
-pageControl.dotSpace = 5
+// color
+pageControl.pageIndicatorTintColor = color1
+pageControl.currentPageIndicatorTintColor = color2
 
-pageControl.displayCount = 8
-
-pageControl.pageIndicatorTintColor = UIColor.gray
-pageControl.currentPageIndicatorTintColor = UIColor.blue
+// size
+let config = Config(
+    displayCount: 7,
+    dotSize: 6,
+    dotSpace: 4,
+    smallDotSizeRatio: 0.5,
+    mediumDotSizeRatio: 0.7
+)
+pageControl.setConfig(config)
 ````
 
 ### Update page
@@ -62,7 +67,7 @@ func scrollViewDidScroll(_ scrollView: UIScrollView) {
 ````
 or
 ````
-pageControl.currentPage = page
+pageControl.setCurrentPage(at: page)
 ````
 
 # Licence
