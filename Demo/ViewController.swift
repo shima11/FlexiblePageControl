@@ -11,7 +11,7 @@ import UIKit
 class ViewController: UIViewController, UIScrollViewDelegate {
     
     let scrollSize: CGFloat = 300
-    let numberOfPage: Int = 10
+    let numberOfPage: Int = 100
 
     let pageControl1 = FlexiblePageControl()
 
@@ -34,13 +34,19 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 
         for index in  0..<numberOfPage {
             let view = UIImageView(frame: CGRect(x: CGFloat(index) * scrollSize, y: 0, width: scrollSize, height: scrollSize))
-            let imageNamed = NSString(format: "image%02d.jpg", index)
+            let _index = index % 10
+            let imageNamed = NSString(format: "image%02d.jpg", _index)
             view.image = UIImage(named: imageNamed as String)
             scrollView.addSubview(view)
         }
 
         view.addSubview(scrollView)
         view.addSubview(pageControl1)
+
+        let page = 4
+        pageControl1.setCurrentPage(currentPage: page)
+
+        scrollView.setContentOffset(CGPoint(x: scrollView.bounds.width * CGFloat(page), y: scrollView.contentOffset.y), animated: false)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
