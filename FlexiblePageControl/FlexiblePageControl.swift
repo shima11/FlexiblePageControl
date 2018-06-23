@@ -24,20 +24,17 @@ public class FlexiblePageControl: UIView {
         }
     }
 
-    public var currentPage: Int = 0 {
-        willSet {
-            guard newValue < numberOfPages, newValue >= 0 else { return }
-        }
-        didSet {
-            guard currentPage != previousCurrentPage else { return }
-            scrollView.layer.removeAllAnimations()
-            setCurrentPage(currentPage: currentPage, animated: true)
-            previousCurrentPage = currentPage
+    public func setCurrentPage(currentPage: Int) {
 
-        }
+        guard currentPage < numberOfPages, currentPage >= 0 else { return }
+        guard currentPage != self.currentPage else { return }
+
+        scrollView.layer.removeAllAnimations()
+        setCurrentPage(currentPage: currentPage, animated: true)
+        self.currentPage = currentPage
     }
-    private var previousCurrentPage: Int = 0
 
+    public private(set) var currentPage: Int = 0
     
     public var numberOfPages: Int = 0 {
         didSet {
@@ -120,7 +117,7 @@ public class FlexiblePageControl: UIView {
 
         let currentPage = Int(round(contentOffsetX/pageWidth))
         if currentPage == self.currentPage { return }
-        self.currentPage = currentPage
+        setCurrentPage(currentPage: currentPage)
     }
 
     public func updateViewSize() {
@@ -130,7 +127,7 @@ public class FlexiblePageControl: UIView {
 
     // MARK: private
 
-    private let scrollView: UIScrollView = UIScrollView()
+    private let scrollView = UIScrollView()
 
     private var itemSize: CGFloat {
 
@@ -141,9 +138,9 @@ public class FlexiblePageControl: UIView {
 
     private func setup() {
 
-        backgroundColor = UIColor.clear
+        backgroundColor = .clear
 
-        scrollView.backgroundColor = UIColor.clear
+        scrollView.backgroundColor = .clear
         scrollView.isUserInteractionEnabled = false
         scrollView.showsHorizontalScrollIndicator = false
 
@@ -164,25 +161,20 @@ public class FlexiblePageControl: UIView {
                 .map { ItemView(itemSize: itemSize, dotSize: config.dotSize, index: $0) }
         }
 
-        scrollView.contentSize = CGSize(width: itemSize * CGFloat(numberOfPages), height: itemSize)
+        scrollView.contentSize = .init(width: itemSize * CGFloat(numberOfPages), height: itemSize)
 
-        let views = scrollView.subviews
-        for view in views {
-            view.removeFromSuperview()
-        }
-        for i in 0..<items.count {
-            scrollView.addSubview(items[i])
-        }
+        scrollView.subviews.forEach { $0.removeFromSuperview() }
+        items.forEach { scrollView.addSubview($0) }
 
-        let size = CGSize(width: itemSize * CGFloat(config.displayCount), height: itemSize)
-        let frame = CGRect(origin: .zero, size: size)
+        let size: CGSize = .init(width: itemSize * CGFloat(config.displayCount), height: itemSize)
+        let frame: CGRect = .init(origin: .zero, size: size)
 
         scrollView.frame = frame
 
         if config.displayCount < numberOfPages {
-            scrollView.contentInset = UIEdgeInsets(top: 0, left: itemSize * 2, bottom: 0, right: itemSize * 2)
+            scrollView.contentInset = .init(top: 0, left: itemSize * 2, bottom: 0, right: itemSize * 2)
         } else {
-            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            scrollView.contentInset = .init(top: 0, left: 0, bottom: 0, right: 0)
         }
 
         setCurrentPage(currentPage: currentPage, animated: false)
@@ -281,7 +273,7 @@ public class FlexiblePageControl: UIView {
         case left, right, stay
     }
 
-    private func behaviorDirection(x:CGFloat) -> Direction {
+    private func behaviorDirection(x: CGFloat) -> Direction {
         
         switch x {
         case let x where x > scrollView.contentOffset.x:
