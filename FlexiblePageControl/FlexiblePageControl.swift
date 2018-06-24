@@ -12,16 +12,30 @@ public class FlexiblePageControl: UIView {
 
     // MARK: public
 
-    public var pageIndicatorTintColor: UIColor = UIColor(red:0.86, green:0.86, blue:0.86, alpha:1.00) {
-        didSet {
-            updateDotColor(currentPage: currentPage)
-        }
+    public struct Config {
+
+        public var displayCount: Int
+        public var dotSize: CGFloat
+        public var dotSpace: CGFloat
+        public var smallDotSizeRatio: CGFloat
+        public var mediumDotSizeRatio: CGFloat
     }
 
-    public var currentPageIndicatorTintColor: UIColor = UIColor(red:0.32, green:0.59, blue:0.91, alpha:1.00) {
-        didSet {
-            updateDotColor(currentPage: currentPage)
-        }
+    // default config
+
+    private var config = Config(
+        displayCount: 7,
+        dotSize: 6,
+        dotSpace: 4,
+        smallDotSizeRatio: 0.5,
+        mediumDotSizeRatio: 0.7
+    )
+
+    public func setConfig(_ config: Config) {
+
+        self.config = config
+
+        update()
     }
 
     public func setCurrentPage(at currentPage: Int) {
@@ -44,24 +58,17 @@ public class FlexiblePageControl: UIView {
         }
     }
 
-    public struct Config {
-
-        public var displayCount: Int
-        public var dotSize: CGFloat
-        public var dotSpace: CGFloat
-        public var smallDotSizeRatio: CGFloat
-        public var mediumDotSizeRatio: CGFloat
+    public var pageIndicatorTintColor: UIColor = UIColor(red:0.86, green:0.86, blue:0.86, alpha:1.00) {
+        didSet {
+            updateDotColor(currentPage: currentPage)
+        }
     }
 
-    // default config
-
-    private var config = Config(
-        displayCount: 7,
-        dotSize: 6,
-        dotSpace: 4,
-        smallDotSizeRatio: 0.5,
-        mediumDotSizeRatio: 0.7
-    )
+    public var currentPageIndicatorTintColor: UIColor = UIColor(red:0.32, green:0.59, blue:0.91, alpha:1.00) {
+        didSet {
+            updateDotColor(currentPage: currentPage)
+        }
+    }
 
     public var animateDuration: TimeInterval = 0.3
 
@@ -69,13 +76,6 @@ public class FlexiblePageControl: UIView {
         didSet {
             scrollView.isHidden = (numberOfPages <= 1 && hidesForSinglePage)
         }
-    }
-
-    public func setConfig(_ config: Config) {
-
-        self.config = config
-
-        update()
     }
 
     public init() {
