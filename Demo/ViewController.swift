@@ -45,13 +45,14 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 
         // test
 
-        let setPage = { [weak self] (page: Int) -> Void in
+//        let setPage = { [weak self] (page: Int) -> Void in
+//
+//            self?.pageControl1.setCurrentPage(at: page)
+//            scrollView.setContentOffset(CGPoint(x: scrollView.bounds.width * CGFloat(page), y: scrollView.contentOffset.y), animated: false)
+//        }
 
-            self?.pageControl1.setCurrentPage(at: page)
-            scrollView.setContentOffset(CGPoint(x: scrollView.bounds.width * CGFloat(page), y: scrollView.contentOffset.y), animated: false)
-        }
-
-        [1,9,12].forEach { setPage($0) }
+        // not work yet
+//        [1,9,12].forEach { setPage($0) }
 
     }
     

@@ -35,16 +35,17 @@ public class FlexiblePageControl: UIView {
 
         self.config = config
 
-        update()
+        update(currentPage: currentPage, config: config)
     }
 
-    public func setCurrentPage(at currentPage: Int) {
+    public func setCurrentPage(at currentPage: Int, animated: Bool = false) {
 
-        guard currentPage < numberOfPages, currentPage >= 0 else { return }
+        guard (currentPage < numberOfPages && currentPage >= 0) else { return }
         guard currentPage != self.currentPage else { return }
 
         scrollView.layer.removeAllAnimations()
-        setCurrentPage(currentPage: currentPage, animated: true)
+//        update(currentPage: currentPage, config: config)
+        updateDot(at: currentPage, animated: animated)
         self.currentPage = currentPage
     }
 
@@ -54,7 +55,7 @@ public class FlexiblePageControl: UIView {
         didSet {
             scrollView.isHidden = (numberOfPages <= 1 && hidesForSinglePage)
             config.displayCount = min(config.displayCount, numberOfPages)
-            update()
+            update(currentPage: currentPage, config: config)
         }
     }
 
@@ -115,9 +116,8 @@ public class FlexiblePageControl: UIView {
 
     public func setProgress(contentOffsetX: CGFloat, pageWidth: CGFloat) {
 
-        let currentPage = Int(round(contentOffsetX/pageWidth))
-        if currentPage == self.currentPage { return }
-        setCurrentPage(at: currentPage)
+        let currentPage = Int(round(contentOffsetX / pageWidth))
+        setCurrentPage(at: currentPage, animated: true)
     }
 
     public func updateViewSize() {
@@ -147,18 +147,21 @@ public class FlexiblePageControl: UIView {
         addSubview(scrollView)
     }
 
-    private func update() {
+    private func update(currentPage: Int, config: Config) {
 
         if currentPage < config.displayCount {
 
-            items = (-2..<(config.displayCount+2))
+            items = (-2..<(config.displayCount + 2))
                 .map { ItemView(itemSize: itemSize, dotSize: config.dotSize, index: $0) }
-        } else {
+        }
+        else {
 
             guard let firstItem = items.first else { return }
             guard let lastItem = items.last else { return }
             items = (firstItem.index...lastItem.index)
                 .map { ItemView(itemSize: itemSize, dotSize: config.dotSize, index: $0) }
+//            items = ((currentPage - config.displayCount - 2)...(currentPage + 2))
+//                .map { ItemView(itemSize: itemSize, dotSize: config.dotSize, index: $0) }
         }
 
         scrollView.contentSize = .init(width: itemSize * CGFloat(numberOfPages), height: itemSize)
@@ -173,14 +176,15 @@ public class FlexiblePageControl: UIView {
 
         if config.displayCount < numberOfPages {
             scrollView.contentInset = .init(top: 0, left: itemSize * 2, bottom: 0, right: itemSize * 2)
-        } else {
+        }
+        else {
             scrollView.contentInset = .init(top: 0, left: 0, bottom: 0, right: 0)
         }
 
-        setCurrentPage(currentPage: currentPage, animated: false)
+        updateDot(at: currentPage, animated: false)
     }
 
-    private func setCurrentPage(currentPage: Int, animated: Bool) {
+    private func updateDot(at currentPage: Int, animated: Bool) {
 
         updateDotColor(currentPage: currentPage)
 
@@ -214,7 +218,8 @@ public class FlexiblePageControl: UIView {
             let x = scrollView.contentOffset.x - itemSize
             moveScrollViewView(x: x, duration: duration)
         }
-        else if CGFloat(currentPage) * itemSize + itemSize >= scrollView.contentOffset.x + scrollView.bounds.width - itemSize {
+        else if CGFloat(currentPage) * itemSize + itemSize >=
+            scrollView.contentOffset.x + scrollView.bounds.width - itemSize {
             let x = scrollView.contentOffset.x + itemSize
             moveScrollViewView(x: x, duration: duration)
         }
@@ -256,6 +261,7 @@ public class FlexiblePageControl: UIView {
             else {
                 item.state = .Normal
             }
+            print(item.state)
         }
     }
 
