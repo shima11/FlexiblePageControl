@@ -11,25 +11,31 @@ import UIKit
 public class FlexiblePageControl: UIView {
 
     // MARK: public
-
+    
     public struct Config {
-
+        
         public var displayCount: Int
         public var dotSize: CGFloat
         public var dotSpace: CGFloat
         public var smallDotSizeRatio: CGFloat
         public var mediumDotSizeRatio: CGFloat
+        
+        public init(displayCount: Int = 7,
+                    dotSize: CGFloat = 6.0,
+                    dotSpace: CGFloat = 4.0,
+                    smallDotSizeRatio: CGFloat = 0.5,
+                    mediumDotSizeRatio: CGFloat = 0.7) {
+            self.displayCount = displayCount
+            self.dotSize = dotSize
+            self.dotSpace = dotSpace
+            self.smallDotSizeRatio = smallDotSizeRatio
+            self.mediumDotSizeRatio = mediumDotSizeRatio
+        }
     }
-
+    
     // default config
-
-    private var config = Config(
-        displayCount: 7,
-        dotSize: 6,
-        dotSpace: 4,
-        smallDotSizeRatio: 0.5,
-        mediumDotSizeRatio: 0.7
-    )
+    
+    private var config = Config()
 
     public func setConfig(_ config: Config) {
 
