@@ -267,7 +267,6 @@ public class FlexiblePageControl: UIView {
             else {
                 item.state = .Normal
             }
-            print(item.state)
         }
     }
 
