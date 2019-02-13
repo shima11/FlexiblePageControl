@@ -2,7 +2,7 @@
 //  File.swift
 //  FlexiblePageControl
 //
-//  Created by 島仁誠 on 2017/04/06.
+//  Created by Jinsei Shima on 2017/04/06.
 //  Copyright © 2017年 jinsei shima. All rights reserved.
 //
 
@@ -20,11 +20,14 @@ public class FlexiblePageControl: UIView {
         public var smallDotSizeRatio: CGFloat
         public var mediumDotSizeRatio: CGFloat
         
-        public init(displayCount: Int = 7,
-                    dotSize: CGFloat = 6.0,
-                    dotSpace: CGFloat = 4.0,
-                    smallDotSizeRatio: CGFloat = 0.5,
-                    mediumDotSizeRatio: CGFloat = 0.7) {
+        public init(
+            displayCount: Int = 7,
+            dotSize: CGFloat = 6.0,
+            dotSpace: CGFloat = 4.0,
+            smallDotSizeRatio: CGFloat = 0.5,
+            mediumDotSizeRatio: CGFloat = 0.7
+            ) {
+            
             self.displayCount = displayCount
             self.dotSize = dotSize
             self.dotSpace = dotSpace
@@ -46,12 +49,25 @@ public class FlexiblePageControl: UIView {
 
     public func setCurrentPage(at currentPage: Int, animated: Bool = false) {
 
-        guard (currentPage < numberOfPages && currentPage >= 0) else { return }
         guard currentPage != self.currentPage else { return }
+        guard numberOfPages > 0 else { return }
+
+        let _currentPage: Int
+
+        if currentPage < 0 {
+            _currentPage = 0
+        }
+        else if currentPage >= numberOfPages {
+            _currentPage = numberOfPages - 1
+        }
+        else {
+            _currentPage = currentPage
+        }
 
         scrollView.layer.removeAllAnimations()
-//        update(currentPage: currentPage, config: config)
-        updateDot(at: currentPage, animated: animated)
+
+        updateDot(at: _currentPage, animated: animated)
+
         self.currentPage = currentPage
     }
 
@@ -65,13 +81,13 @@ public class FlexiblePageControl: UIView {
         }
     }
 
-    public var pageIndicatorTintColor: UIColor = UIColor(red:0.86, green:0.86, blue:0.86, alpha:1.00) {
+    public var pageIndicatorTintColor: UIColor = UIColor(red: 0.86, green: 0.86, blue: 0.86, alpha: 1.00) {
         didSet {
             updateDotColor(currentPage: currentPage)
         }
     }
 
-    public var currentPageIndicatorTintColor: UIColor = UIColor(red:0.32, green:0.59, blue:0.91, alpha:1.00) {
+    public var currentPageIndicatorTintColor: UIColor = UIColor(red: 0.32, green: 0.59, blue: 0.91, alpha: 1.00) {
         didSet {
             updateDotColor(currentPage: currentPage)
         }
@@ -112,7 +128,7 @@ public class FlexiblePageControl: UIView {
 
         super.layoutSubviews()
         
-        scrollView.center = CGPoint(x: bounds.width/2, y: bounds.height/2)
+        scrollView.center = CGPoint(x: bounds.width / 2, y: bounds.height / 2)
     }
 
     public override var intrinsicContentSize: CGSize {
@@ -164,6 +180,7 @@ public class FlexiblePageControl: UIView {
 
             guard let firstItem = items.first else { return }
             guard let lastItem = items.last else { return }
+
             items = (firstItem.index...lastItem.index)
                 .map { ItemView(itemSize: itemSize, dotSize: config.dotSize, index: $0) }
 //            items = ((currentPage - config.displayCount - 2)...(currentPage + 2))
@@ -367,9 +384,9 @@ private class ItemView: UIView {
         backgroundColor = UIColor.clear
         
         dotView.frame.size = CGSize(width: dotSize, height: dotSize)
-        dotView.center = CGPoint(x: itemSize/2, y: itemSize/2)
+        dotView.center = CGPoint(x: itemSize / 2, y: itemSize / 2)
         dotView.backgroundColor = dotColor
-        dotView.layer.cornerRadius = dotSize/2
+        dotView.layer.cornerRadius = dotSize / 2
         dotView.layer.masksToBounds = true
         
         addSubview(dotView)
