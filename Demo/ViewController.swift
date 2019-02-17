@@ -13,24 +13,20 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     let scrollSize: CGFloat = 300
     let numberOfPage: Int = 100
 
-    let pageControl1 = FlexiblePageControl()
-
-    @IBOutlet weak var pageControl2: FlexiblePageControl!
+    let pageControl = FlexiblePageControl()
+    let scrollView = UIScrollView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let scrollView = UIScrollView()
         scrollView.delegate = self
         scrollView.frame = CGRect(x: 0, y: 0, width: scrollSize, height: scrollSize)
         scrollView.center = view.center
         scrollView.contentSize = CGSize(width: scrollSize * CGFloat(numberOfPage), height: scrollSize)
         scrollView.isPagingEnabled = true
         
-        pageControl1.center = CGPoint(x: scrollView.center.x, y: scrollView.frame.maxY + 16)
-        pageControl1.numberOfPages = numberOfPage
-
-        pageControl2.numberOfPages = numberOfPage
+        pageControl.center = CGPoint(x: scrollView.center.x, y: scrollView.frame.maxY + 16)
+        pageControl.numberOfPages = numberOfPage
 
         for index in  0..<numberOfPage {
             let view = UIImageView(frame: CGRect(x: CGFloat(index) * scrollSize, y: 0, width: scrollSize, height: scrollSize))
@@ -41,24 +37,23 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         }
 
         view.addSubview(scrollView)
-        view.addSubview(pageControl1)
+        view.addSubview(pageControl)
 
-        // test
+        changePage(index: 4)
+        changePage(index: 0)
+        changePage(index: 4)
 
-//        let setPage = { [weak self] (page: Int) -> Void in
-//
-//            self?.pageControl1.setCurrentPage(at: page)
-//            scrollView.setContentOffset(CGPoint(x: scrollView.bounds.width * CGFloat(page), y: scrollView.contentOffset.y), animated: false)
-//        }
+        #warning("index=4までは動作しているっぽいが、５以上を設定すると挙動があやしい")
 
-        // not work yet
-//        [1,9,12].forEach { setPage($0) }
+    }
 
+    func changePage(index: Int) {
+        pageControl.setCurrentPage(at: index)
+        scrollView.setContentOffset(.init(x: CGFloat(index) * scrollSize, y: 0), animated: true)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
 
-        pageControl1.setProgress(contentOffsetX: scrollView.contentOffset.x, pageWidth: scrollView.bounds.width)
-        pageControl2.setProgress(contentOffsetX: scrollView.contentOffset.x, pageWidth: scrollView.bounds.width)
+        pageControl.setProgress(contentOffsetX: scrollView.contentOffset.x, pageWidth: scrollView.bounds.width)
     }
 }

@@ -106,7 +106,6 @@ public class FlexiblePageControl: UIView {
         super.init(frame: .zero)
 
         setup()
-        updateViewSize()
     }
 
     public override init(frame: CGRect) {
@@ -121,7 +120,6 @@ public class FlexiblePageControl: UIView {
         super.init(coder: aDecoder)
 
         setup()
-        updateViewSize()
     }
 
     public override func layoutSubviews() {
@@ -142,10 +140,6 @@ public class FlexiblePageControl: UIView {
         setCurrentPage(at: currentPage, animated: true)
     }
 
-    public func updateViewSize() {
-
-        self.bounds.size = intrinsicContentSize
-    }
 
     // MARK: private
 
@@ -166,6 +160,7 @@ public class FlexiblePageControl: UIView {
         scrollView.isUserInteractionEnabled = false
         scrollView.showsHorizontalScrollIndicator = false
 
+        scrollView.removeFromSuperview()
         addSubview(scrollView)
     }
 
@@ -223,6 +218,7 @@ public class FlexiblePageControl: UIView {
             $0.dotColor = ($0.index == currentPage) ?
                 currentPageIndicatorTintColor : pageIndicatorTintColor
         }
+
     }
     
     private func updateDotPosition(currentPage: Int, animated: Bool) {
