@@ -44,7 +44,7 @@ public class FlexiblePageControl: UIView {
 
         self.config = config
 
-        update(currentPage: currentPage, config: config)
+        update(scrollView: scrollView, currentPage: currentPage, config: config)
     }
 
     public func setCurrentPage(at currentPage: Int, animated: Bool = false) {
@@ -64,12 +64,29 @@ public class FlexiblePageControl: UIView {
             _currentPage = currentPage
         }
 
+        self.currentPage = _currentPage
+
         scrollView.layer.removeAllAnimations()
 
-        updateDot(at: _currentPage, animated: animated)
+        #warning("itemsの各itemのindexを更新する機能が必要")
+//        updateItemsIndex(currentPage: _currentPage)
 
-        self.currentPage = currentPage
+        updateDot(at: _currentPage, animated: animated)
     }
+
+//    private func updateItemsIndex(currentPage: Int) {
+//
+//        if numberOfPages < config.displayCount {
+//            items.enumerated().forEach { index, item in
+//                item.index = index
+//            }
+//        } else {
+//            items.enumerated().forEach { index, item in
+//                print(index, currentPage)
+//                item.index = (currentPage - 2) + index
+//            }
+//        }
+//    }
 
     public private(set) var currentPage: Int = 0
     
@@ -77,19 +94,19 @@ public class FlexiblePageControl: UIView {
         didSet {
             scrollView.isHidden = (numberOfPages <= 1 && hidesForSinglePage)
             config.displayCount = min(config.displayCount, numberOfPages)
-            update(currentPage: currentPage, config: config)
+            update(scrollView: scrollView, currentPage: currentPage, config: config)
         }
     }
 
     public var pageIndicatorTintColor: UIColor = UIColor(red: 0.86, green: 0.86, blue: 0.86, alpha: 1.00) {
         didSet {
-            updateDotColor(currentPage: currentPage)
+            updateDot(at: currentPage, animated: false)
         }
     }
 
     public var currentPageIndicatorTintColor: UIColor = UIColor(red: 0.32, green: 0.59, blue: 0.91, alpha: 1.00) {
         didSet {
-            updateDotColor(currentPage: currentPage)
+            updateDot(at: currentPage, animated: false)
         }
     }
 
@@ -164,7 +181,7 @@ public class FlexiblePageControl: UIView {
         addSubview(scrollView)
     }
 
-    private func update(currentPage: Int, config: Config) {
+    private func update(scrollView: UIScrollView, currentPage: Int, config: Config) {
 
         if currentPage < config.displayCount {
 
@@ -173,13 +190,11 @@ public class FlexiblePageControl: UIView {
         }
         else {
 
-            guard let firstItem = items.first else { return }
-            guard let lastItem = items.last else { return }
+            guard let firstIndex = items.first?.index else { return }
+            guard let lastIndex = items.last?.index else { return }
 
-            items = (firstItem.index...lastItem.index)
+            items = (firstIndex...lastIndex)
                 .map { ItemView(itemSize: itemSize, dotSize: config.dotSize, index: $0) }
-//            items = ((currentPage - config.displayCount - 2)...(currentPage + 2))
-//                .map { ItemView(itemSize: itemSize, dotSize: config.dotSize, index: $0) }
         }
 
         scrollView.contentSize = .init(width: itemSize * CGFloat(numberOfPages), height: itemSize)
@@ -192,7 +207,7 @@ public class FlexiblePageControl: UIView {
 
         scrollView.frame = frame
 
-        if config.displayCount < numberOfPages {
+        if numberOfPages > config.displayCount {
             scrollView.contentInset = .init(top: 0, left: itemSize * 2, bottom: 0, right: itemSize * 2)
         }
         else {
@@ -204,24 +219,13 @@ public class FlexiblePageControl: UIView {
 
     private func updateDot(at currentPage: Int, animated: Bool) {
 
-        updateDotColor(currentPage: currentPage)
-
-        if numberOfPages > config.displayCount {
-            updateDotPosition(currentPage: currentPage, animated: animated)
-            updateDotSize(currentPage: currentPage, animated: animated)
-        }
-    }
-    
-    private func updateDotColor(currentPage: Int) {
-
-        items.forEach {
-            $0.dotColor = ($0.index == currentPage) ?
-                currentPageIndicatorTintColor : pageIndicatorTintColor
-        }
-
+        updateDotPosition(currentPage: currentPage, animated: animated)
+        updateDot(currentPage: currentPage, animated: animated)
     }
     
     private func updateDotPosition(currentPage: Int, animated: Bool) {
+
+        guard numberOfPages > config.displayCount else { return }
 
         let duration = animated ? animateDuration : 0
 
@@ -244,11 +248,20 @@ public class FlexiblePageControl: UIView {
         }
     }
 
-    private func updateDotSize(currentPage: Int, animated: Bool) {
+    private func updateDot(currentPage: Int, animated: Bool) {
+
+        items.forEach { item in
+            item.dotColor = (item.index == currentPage) ?
+                currentPageIndicatorTintColor : pageIndicatorTintColor
+        }
+
+        // 表示数がページ数より小さい場合は、Dotのサイズを小さくする必要がないため
+        guard numberOfPages > config.displayCount else { return }
 
         let duration = animated ? animateDuration : 0
 
         items.forEach { item in
+
             item.animateDuration = duration
             if item.index == currentPage {
                 item.state = .Normal

@@ -39,9 +39,10 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         view.addSubview(scrollView)
         view.addSubview(pageControl)
 
+//        pageControl.numberOfPages = 3
         changePage(index: 4)
         changePage(index: 0)
-        changePage(index: 5)
+        changePage(index: 20)
 
         #warning("index=4までは動作しているっぽいが、５以上を設定すると挙動があやしい")
 
