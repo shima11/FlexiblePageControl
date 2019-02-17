@@ -41,7 +41,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 
         changePage(index: 4)
         changePage(index: 0)
-        changePage(index: 4)
+        changePage(index: 5)
 
         #warning("index=4までは動作しているっぽいが、５以上を設定すると挙動があやしい")
 
