@@ -60,7 +60,7 @@ public class FlexiblePageControl: UIView {
     public var numberOfPages: Int = 0 {
         didSet {
             scrollView.isHidden = (numberOfPages <= 1 && hidesForSinglePage)
-            config.displayCount = min(config.displayCount, numberOfPages)
+            displayCount = min(config.displayCount, numberOfPages)
             update(currentPage: currentPage, config: config)
         }
     }
@@ -117,7 +117,7 @@ public class FlexiblePageControl: UIView {
 
     public override var intrinsicContentSize: CGSize {
 
-        return CGSize(width: itemSize * CGFloat(config.displayCount), height: itemSize)
+        return CGSize(width: itemSize * CGFloat(displayCount), height: itemSize)
     }
 
     public func setProgress(contentOffsetX: CGFloat, pageWidth: CGFloat) {
@@ -142,6 +142,8 @@ public class FlexiblePageControl: UIView {
     
     private var items: [ItemView] = []
 
+    private var displayCount: Int = 0
+
     private func setup() {
 
         backgroundColor = .clear
@@ -155,9 +157,9 @@ public class FlexiblePageControl: UIView {
 
     private func update(currentPage: Int, config: Config) {
 
-        if currentPage < config.displayCount {
+        if currentPage < displayCount {
 
-            items = (-2..<(config.displayCount + 2))
+            items = (-2..<(displayCount + 2))
                 .map { ItemView(itemSize: itemSize, dotSize: config.dotSize, index: $0) }
         }
         else {
@@ -166,7 +168,7 @@ public class FlexiblePageControl: UIView {
             guard let lastItem = items.last else { return }
             items = (firstItem.index...lastItem.index)
                 .map { ItemView(itemSize: itemSize, dotSize: config.dotSize, index: $0) }
-//            items = ((currentPage - config.displayCount - 2)...(currentPage + 2))
+//            items = ((currentPage - displayCount - 2)...(currentPage + 2))
 //                .map { ItemView(itemSize: itemSize, dotSize: config.dotSize, index: $0) }
         }
 
@@ -175,12 +177,12 @@ public class FlexiblePageControl: UIView {
         scrollView.subviews.forEach { $0.removeFromSuperview() }
         items.forEach { scrollView.addSubview($0) }
 
-        let size: CGSize = .init(width: itemSize * CGFloat(config.displayCount), height: itemSize)
+        let size: CGSize = .init(width: itemSize * CGFloat(displayCount), height: itemSize)
         let frame: CGRect = .init(origin: .zero, size: size)
 
         scrollView.frame = frame
 
-        if config.displayCount < numberOfPages {
+        if displayCount < numberOfPages {
             scrollView.contentInset = .init(top: 0, left: itemSize * 2, bottom: 0, right: itemSize * 2)
         }
         else {
@@ -194,7 +196,7 @@ public class FlexiblePageControl: UIView {
 
         updateDotColor(currentPage: currentPage)
 
-        if numberOfPages > config.displayCount {
+        if numberOfPages > displayCount {
             updateDotPosition(currentPage: currentPage, animated: animated)
             updateDotSize(currentPage: currentPage, animated: animated)
         }
