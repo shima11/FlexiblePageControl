@@ -16,10 +16,6 @@ Pod::Spec.new do |s|
 This Framework is flexible PageControl like Instagram.
                   DESC
 
-  s.homepage     = "http://EXAMPLE/FlexiblePageControl"
-
-  # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
-
   s.license      = { :type => "MIT", :file => "LICENSE" }
 
   s.homepage = "https://github.com/shima11/FlexiblePageControl"
