@@ -157,17 +157,19 @@ public class FlexiblePageControl: UIView {
 
     private func update(currentPage: Int, config: Config) {
 
+        let itemConfig = ItemView.ItemConfig(dotSize: config.dotSize, itemSize: itemSize, smallDotSizeRatio: config.smallDotSizeRatio, mediumDotSizeRatio: config.mediumDotSizeRatio)
+
         if currentPage < displayCount {
 
             items = (-2..<(displayCount + 2))
-                .map { ItemView(itemSize: itemSize, dotSize: config.dotSize, index: $0) }
+                .map { ItemView(config: itemConfig, index: $0) }
         }
         else {
 
             guard let firstItem = items.first else { return }
             guard let lastItem = items.last else { return }
             items = (firstItem.index...lastItem.index)
-                .map { ItemView(itemSize: itemSize, dotSize: config.dotSize, index: $0) }
+                .map { ItemView(config: itemConfig, index: $0) }
 //            items = ((currentPage - displayCount - 2)...(currentPage + 2))
 //                .map { ItemView(itemSize: itemSize, dotSize: config.dotSize, index: $0) }
         }
@@ -328,16 +330,19 @@ public class FlexiblePageControl: UIView {
 
 private class ItemView: UIView {
 
+    struct ItemConfig {
+        public var dotSize: CGFloat
+        public var itemSize: CGFloat
+        public var smallDotSizeRatio: CGFloat
+        public var mediumDotSizeRatio: CGFloat
+    }
+
     enum State {
         case None
         case Small
         case Medium
         case Normal
     }
-
-    static var mediumSizeRatio: CGFloat = 0.7
-
-    static var smallSizeRatio: CGFloat = 0.5
 
     var index: Int
 
@@ -355,10 +360,12 @@ private class ItemView: UIView {
 
     var animateDuration: TimeInterval = 0.3
 
-    init(itemSize: CGFloat, dotSize: CGFloat, index: Int) {
+    init(config: ItemConfig, index: Int) {
         
-        self.itemSize = itemSize
-        self.dotSize = dotSize
+        self.itemSize = config.itemSize
+        self.dotSize = config.dotSize
+        self.mediumSizeRatio = config.mediumDotSizeRatio
+        self.smallSizeRatio = config.smallDotSizeRatio
         self.index = index
         
         let x = itemSize * CGFloat(index)
@@ -389,7 +396,11 @@ private class ItemView: UIView {
     private let itemSize: CGFloat
 
     private let dotSize: CGFloat
-    
+
+    private let mediumSizeRatio: CGFloat
+
+    private let smallSizeRatio: CGFloat
+
     private func updateDotSize(state: State) {
         
         var _size: CGSize
@@ -398,11 +409,11 @@ private class ItemView: UIView {
         case .Normal:
             _size = CGSize(width: dotSize, height: dotSize)
         case .Medium:
-            _size = CGSize(width: dotSize * ItemView.mediumSizeRatio, height: dotSize * ItemView.mediumSizeRatio)
+            _size = CGSize(width: dotSize * mediumSizeRatio, height: dotSize * mediumSizeRatio)
         case .Small:
             _size = CGSize(
-                width: dotSize * ItemView.smallSizeRatio,
-                height: dotSize * ItemView.smallSizeRatio
+                width: dotSize * smallSizeRatio,
+                height: dotSize * smallSizeRatio
             )
         case .None:
             _size = CGSize.zero
