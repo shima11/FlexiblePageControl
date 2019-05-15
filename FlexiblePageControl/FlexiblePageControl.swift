@@ -40,6 +40,8 @@ public class FlexiblePageControl: UIView {
     public func setConfig(_ config: Config) {
 
         self.config = config
+        
+        invalidateIntrinsicContentSize()
 
         update(currentPage: currentPage, config: config)
     }
@@ -142,7 +144,11 @@ public class FlexiblePageControl: UIView {
     
     private var items: [ItemView] = []
 
-    private var displayCount: Int = 0
+    private var displayCount: Int = 0 {
+        didSet {
+            invalidateIntrinsicContentSize()
+        }
+    }
 
     private func setup() {
 
