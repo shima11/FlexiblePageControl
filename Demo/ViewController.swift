@@ -10,50 +10,68 @@ import UIKit
 
 class ViewController: UIViewController, UIScrollViewDelegate {
     
-    let scrollSize: CGFloat = 300
-    let numberOfPage: Int = 100
-
     let pageControl1 = FlexiblePageControl()
-
     @IBOutlet weak var pageControl2: FlexiblePageControl!
+
+    let scrollView = UIScrollView()
+    let scrollSize: CGFloat = 300
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let scrollView = UIScrollView()
         scrollView.delegate = self
         scrollView.frame = CGRect(x: 0, y: 0, width: scrollSize, height: scrollSize)
         scrollView.center = view.center
-        scrollView.contentSize = CGSize(width: scrollSize * CGFloat(numberOfPage), height: scrollSize)
         scrollView.isPagingEnabled = true
-        
+
         pageControl1.center = CGPoint(x: scrollView.center.x, y: scrollView.frame.maxY + 16)
-        pageControl1.numberOfPages = numberOfPage
-
-        pageControl2.numberOfPages = numberOfPage
-
-        for index in  0..<numberOfPage {
-            let view = UIImageView(frame: CGRect(x: CGFloat(index) * scrollSize, y: 0, width: scrollSize, height: scrollSize))
-            let _index = index % 10
-            let imageNamed = NSString(format: "image%02d.jpg", _index)
-            view.image = UIImage(named: imageNamed as String)
-            scrollView.addSubview(view)
-        }
 
         view.addSubview(scrollView)
         view.addSubview(pageControl1)
 
-        // test
-
+        setContent(numberOfPages: 100)
+        
+        // debug
 //        let setPage = { [weak self] (page: Int) -> Void in
 //
 //            self?.pageControl1.setCurrentPage(at: page)
 //            scrollView.setContentOffset(CGPoint(x: scrollView.bounds.width * CGFloat(page), y: scrollView.contentOffset.y), animated: false)
 //        }
-
-        // not work yet
+//        // not work yet
 //        [1,9,12].forEach { setPage($0) }
 
+    }
+    
+    func setContent(numberOfPages: Int) {
+        
+        scrollView.subviews.forEach { $0.removeFromSuperview() }
+        
+        scrollView.contentSize = CGSize(width: scrollSize * CGFloat(numberOfPages), height: scrollSize)
+        pageControl1.numberOfPages = numberOfPages
+        pageControl2.numberOfPages = numberOfPages
+        
+        for index in  0..<numberOfPages {
+            
+            let view = UIImageView(
+                frame: .init(
+                    x: CGFloat(index) * scrollSize,
+                    y: 0,
+                    width: scrollSize,
+                    height: scrollSize
+                )
+            )
+            let imageNamed = NSString(format: "image%02d.jpg", index % 10) as String
+            view.image = UIImage(named: imageNamed)
+            scrollView.addSubview(view)
+        }
+
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // debug
+        setContent(numberOfPages: 10)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
