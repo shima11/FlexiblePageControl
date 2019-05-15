@@ -180,9 +180,8 @@ public class FlexiblePageControl: UIView {
         items.forEach { scrollView.addSubview($0) }
 
         let size: CGSize = .init(width: itemSize * CGFloat(displayCount), height: itemSize)
-        let frame: CGRect = .init(origin: .zero, size: size)
 
-        scrollView.frame = frame
+        scrollView.bounds.size = size
 
         if displayCount < numberOfPages {
             scrollView.contentInset = .init(top: 0, left: itemSize * 2, bottom: 0, right: itemSize * 2)
