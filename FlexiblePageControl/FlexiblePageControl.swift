@@ -67,13 +67,13 @@ public class FlexiblePageControl: UIView {
         }
     }
 
-    public var pageIndicatorTintColor: UIColor = UIColor(red:0.86, green:0.86, blue:0.86, alpha:1.00) {
+    public var pageIndicatorTintColor: UIColor = UIColor(red: 0.86, green: 0.86, blue: 0.86, alpha: 1.00) {
         didSet {
             updateDotColor(currentPage: currentPage)
         }
     }
 
-    public var currentPageIndicatorTintColor: UIColor = UIColor(red:0.32, green:0.59, blue:0.91, alpha:1.00) {
+    public var currentPageIndicatorTintColor: UIColor = UIColor(red: 0.32, green: 0.59, blue: 0.91, alpha: 1.00) {
         didSet {
             updateDotColor(currentPage: currentPage)
         }
@@ -114,7 +114,7 @@ public class FlexiblePageControl: UIView {
 
         super.layoutSubviews()
         
-        scrollView.center = CGPoint(x: bounds.width/2, y: bounds.height/2)
+        scrollView.center = CGPoint(x: bounds.width / 2, y: bounds.height / 2)
     }
 
     public override var intrinsicContentSize: CGSize {
@@ -223,20 +223,20 @@ public class FlexiblePageControl: UIView {
 
         if currentPage == 0 {
             let x = -scrollView.contentInset.left
-            moveScrollViewView(x: x, duration: duration)
+            moveScrollView(x: x, duration: duration)
         }
         else if currentPage == numberOfPages - 1 {
             let x = scrollView.contentSize.width - scrollView.bounds.width + scrollView.contentInset.right
-            moveScrollViewView(x: x, duration: duration)
+            moveScrollView(x: x, duration: duration)
         }
         else if CGFloat(currentPage) * itemSize <= scrollView.contentOffset.x + itemSize {
             let x = scrollView.contentOffset.x - itemSize
-            moveScrollViewView(x: x, duration: duration)
+            moveScrollView(x: x, duration: duration)
         }
         else if CGFloat(currentPage) * itemSize + itemSize >=
             scrollView.contentOffset.x + scrollView.bounds.width - itemSize {
             let x = scrollView.contentOffset.x + itemSize
-            moveScrollViewView(x: x, duration: duration)
+            moveScrollView(x: x, duration: duration)
         }
     }
 
@@ -279,7 +279,7 @@ public class FlexiblePageControl: UIView {
         }
     }
 
-    private func moveScrollViewView(x: CGFloat, duration: TimeInterval) {
+    private func moveScrollView(x: CGFloat, duration: TimeInterval) {
 
         let direction = behaviorDirection(x: x)
         reusedView(direction: direction)
@@ -289,8 +289,9 @@ public class FlexiblePageControl: UIView {
     }
 
     private enum Direction {
-
-        case left, right, stay
+        case left
+        case right
+        case stay
     }
 
     private func behaviorDirection(x: CGFloat) -> Direction {
