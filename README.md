@@ -48,13 +48,14 @@ pageControl.pageIndicatorTintColor = color1
 pageControl.currentPageIndicatorTintColor = color2
 
 // size
-let config = Config(
+let config = FlexiblePageControl.Config(
     displayCount: 7,
     dotSize: 6,
     dotSpace: 4,
     smallDotSizeRatio: 0.5,
     mediumDotSizeRatio: 0.7
 )
+
 pageControl.setConfig(config)
 ````
 

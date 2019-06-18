@@ -39,6 +39,7 @@
 		D44B619D1E98B7AE00D38950 /* image08.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = image08.jpg; path = resouce/image08.jpg; sourceTree = "<group>"; };
 		D44B619E1E98B7AE00D38950 /* image09.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = image09.jpg; path = resouce/image09.jpg; sourceTree = "<group>"; };
 		D44B61AA1E98B9C300D38950 /* image00.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = image00.jpg; path = resouce/image00.jpg; sourceTree = "<group>"; };
+		D4D2D72622B8675B00B07B10 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		D4DC6C3B1E92B8FD0022F452 /* FlexiblePageControl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FlexiblePageControl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4DC6C3E1E92B8FD0022F452 /* FlexiblePageControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlexiblePageControl.h; sourceTree = "<group>"; };
 		D4DC6C3F1E92B8FD0022F452 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -89,6 +90,7 @@
 		D4DC6C311E92B8FD0022F452 = {
 			isa = PBXGroup;
 			children = (
+				D4D2D72622B8675B00B07B10 /* README.md */,
 				D4DC6C3D1E92B8FD0022F452 /* FlexiblePageControl */,
 				D4DC6C4B1E92B9310022F452 /* Demo */,
 				D4DC6C3C1E92B8FD0022F452 /* Products */,
