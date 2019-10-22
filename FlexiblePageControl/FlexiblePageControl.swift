@@ -123,7 +123,9 @@ public class FlexiblePageControl: UIView {
     }
 
     public func setProgress(contentOffsetX: CGFloat, pageWidth: CGFloat) {
-
+        guard pageWidth > 0 else {
+            return
+        }
         let currentPage = Int(round(contentOffsetX / pageWidth))
         setCurrentPage(at: currentPage, animated: true)
     }
