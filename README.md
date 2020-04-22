@@ -70,6 +70,7 @@ or
 ````
 pageControl.setCurrentPage(at: page)
 ````
+Note: Using `pageControl.setCurrentPage(at: page)` method has the (possibly?) unitended side effect of not animating the dots when a user is progressing through them. To ensure that the animation is performed correctly, use `pageControl.setProgress(contentOffsetX: scrollView.contentOffset.x, pageWidth: scrollView.bounds.width)` (within `scrollViewDidScroll`) instead.
 
 # Licence
 
