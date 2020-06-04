@@ -12,7 +12,7 @@ public class FlexiblePageControl: UIView {
 
     // MARK: public
     
-    public struct Config {
+    @objc public class Config: NSObject {
         
         public var displayCount: Int
         public var dotSize: CGFloat
@@ -37,7 +37,7 @@ public class FlexiblePageControl: UIView {
     
     private var config = Config()
 
-    public func setConfig(_ config: Config) {
+    @objc dynamic public func setConfig(_ config: Config) {
 
         self.config = config
         
@@ -67,19 +67,19 @@ public class FlexiblePageControl: UIView {
         }
     }
 
-    public var pageIndicatorTintColor: UIColor = UIColor(red: 0.86, green: 0.86, blue: 0.86, alpha: 1.00) {
+    @objc dynamic public var pageIndicatorTintColor: UIColor = UIColor(red: 0.86, green: 0.86, blue: 0.86, alpha: 1.00) {
         didSet {
             updateDotColor(currentPage: currentPage)
         }
     }
 
-    public var currentPageIndicatorTintColor: UIColor = UIColor(red: 0.32, green: 0.59, blue: 0.91, alpha: 1.00) {
+    @objc dynamic public var currentPageIndicatorTintColor: UIColor = UIColor(red: 0.32, green: 0.59, blue: 0.91, alpha: 1.00) {
         didSet {
             updateDotColor(currentPage: currentPage)
         }
     }
 
-    public var animateDuration: TimeInterval = 0.3
+    @objc dynamic public var animateDuration: TimeInterval = 0.3
 
     public var hidesForSinglePage: Bool = false {
         didSet {
