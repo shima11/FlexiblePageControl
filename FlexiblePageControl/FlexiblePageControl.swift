@@ -42,7 +42,8 @@ public class FlexiblePageControl: UIView {
         self.config = config
         
         invalidateIntrinsicContentSize()
-
+		
+		displayCount = min(config.displayCount, numberOfPages)
         update(currentPage: currentPage, config: config)
     }
 
