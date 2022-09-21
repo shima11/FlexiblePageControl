@@ -28,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1FAFE6D928DB5971006AD157 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		D42F44961EE7C8FF0097C199 /* ViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ViewController.storyboard; sourceTree = "<group>"; };
 		D44B61961E98B7AE00D38950 /* image01.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = image01.jpg; path = resouce/image01.jpg; sourceTree = "<group>"; };
 		D44B61971E98B7AE00D38950 /* image02.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = image02.jpg; path = resouce/image02.jpg; sourceTree = "<group>"; };
@@ -90,6 +91,7 @@
 		D4DC6C311E92B8FD0022F452 = {
 			isa = PBXGroup;
 			children = (
+				1FAFE6D928DB5971006AD157 /* Package.swift */,
 				D4D2D72622B8675B00B07B10 /* README.md */,
 				D4DC6C3D1E92B8FD0022F452 /* FlexiblePageControl */,
 				D4DC6C4B1E92B9310022F452 /* Demo */,
